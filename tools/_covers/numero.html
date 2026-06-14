@@ -1,0 +1,52 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,800;1,900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:600px; height:800px; }
+  .cover {
+    width:600px; height:800px; position:relative; overflow:hidden;
+    background:
+      repeating-linear-gradient(-45deg, rgba(255,255,255,.02) 0 1px, transparent 1px 46px),
+      radial-gradient(130% 80% at 100% 0%, #f5c51830 0%, transparent 55%),
+      linear-gradient(160deg, #0c0d11 0%, #07080c 100%);
+    font-family:'Barlow Condensed', sans-serif; color:#fff;
+    padding:56px 52px; display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .bar { position:absolute; top:0; left:0; width:14px; height:100%; background:#f5c518; }
+  .icon { position:absolute; right:34px; top:150px; font-size:260px; line-height:1; opacity:.10; filter:grayscale(.2); }
+  .top { position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; }
+  .brand { font-weight:800; font-size:30px; letter-spacing:.04em; }
+  .brand b { color:#f5c518; }
+  .pill { font-weight:800; font-size:13px; letter-spacing:.28em; text-transform:uppercase;
+          background:#f5c518; color:#000; padding:6px 12px; border-radius:4px; }
+  .mid { position:relative; z-index:2; }
+  .cat { font-weight:700; font-size:17px; letter-spacing:.3em; text-transform:uppercase; color:#f5c518; }
+  .title { font-weight:800; font-style:italic; text-transform:uppercase; line-height:.92;
+           font-size:74px; margin-top:14px; max-width:480px; }
+  .rule { height:5px; width:90px; background:#f5c518; margin-top:26px; border-radius:3px; }
+  .bottom { position:relative; z-index:2; display:flex; align-items:flex-end; justify-content:space-between; }
+  .by { font-family:'Barlow', sans-serif; font-weight:500; font-size:18px; color:#aeb4c0; }
+  .by span { color:#fff; font-weight:700; }
+  .tag { font-family:'Barlow', sans-serif; font-style:italic; font-size:15px; color:#7e8694; text-align:right; }
+</style></head>
+<body>
+  <div class="cover">
+    <div class="bar"></div>
+    <div class="icon">📊</div>
+    <div class="top">
+      <div class="brand">PER<b>4</b>MANCE</div>
+      <div class="pill">E-book</div>
+    </div>
+    <div class="mid">
+      <div class="cat">Performance</div>
+      <div class="title">Os Números da Recuperação</div>
+      <div class="rule"></div>
+    </div>
+    <div class="bottom">
+      <div class="by">by <span>Gustavo Vieira</span></div>
+      <div class="tag">Recuperação<br>& Performance</div>
+    </div>
+  </div>
+</body></html>

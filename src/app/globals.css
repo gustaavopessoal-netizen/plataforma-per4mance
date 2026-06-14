@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0b0f;
+  --foreground: #ededed;
+  --per-azul: #1d6fe8;
+  --per-laranja: #f26d40;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-per-azul: var(--per-azul);
+  --color-per-laranja: var(--per-laranja);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-barlow);
+}
+
+html {
+  background: var(--background);
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Esconde a barra de rolagem das fileiras (estilo Netflix) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Título de seção com a fonte de display */
+.font-display {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+}
+
+/* Brilho sutil de acento usado em cards e botões */
+@keyframes per-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
