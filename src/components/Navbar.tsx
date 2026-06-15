@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import { isAdmin } from "@/lib/admin";
 
 const LINKS = [
   { label: "Início", href: "/" },
@@ -76,6 +77,14 @@ export function Navbar() {
               <path d="m21 21-4.3-4.3" strokeLinecap="round" />
             </svg>
           </button>
+          {isAdmin(user?.email) && (
+            <Link
+              href="/admin"
+              className="hidden rounded-lg border border-per-laranja/50 bg-per-laranja/15 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-per-laranja transition-colors hover:bg-per-laranja/25 sm:block"
+            >
+              Painel
+            </Link>
+          )}
           {user ? (
             <div className="flex items-center gap-3">
               <div className="grid h-9 w-9 place-items-center rounded-full bg-per-azul text-sm font-bold uppercase text-white ring-1 ring-white/20">

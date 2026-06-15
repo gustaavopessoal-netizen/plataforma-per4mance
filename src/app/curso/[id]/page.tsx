@@ -9,6 +9,8 @@ import { cursoLiberado } from "@/data/access";
 import { getAcessos } from "@/data/entitlements";
 import { AcessosProvider } from "@/components/AcessosProvider";
 import { BotaoComprar } from "@/components/BotaoComprar";
+import { PlayerCurso } from "@/components/PlayerCurso";
+import { getVideosDoCurso } from "@/data/videos";
 
 export function generateStaticParams() {
   return cursos.map((c) => ({ id: c.id }));
@@ -26,6 +28,8 @@ export default async function CursoPage({
   const relacionados = cursos.filter((c) => c.id !== curso.id).slice(0, 8);
   const acessos = await getAcessos();
   const liberado = cursoLiberado(acessos, curso.id);
+  // Só carrega os vídeos para quem tem acesso (não vaza link p/ não-comprador).
+  const videos = liberado ? await getVideosDoCurso(curso.id) : {};
 
   return (
     <main className="relative min-h-screen bg-[#0a0b0f]">
@@ -57,7 +61,7 @@ export default async function CursoPage({
                 </svg>
               </button>
               <span className="mt-4 rounded-full border border-white/20 bg-black/50 px-3 py-1 text-xs font-medium text-neutral-300 backdrop-blur">
-                Prévia • as aulas reais entram na Fase 4 (Panda Video)
+                Você tem acesso • role para assistir às aulas
               </span>
             </>
           ) : (
@@ -92,6 +96,12 @@ export default async function CursoPage({
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_340px]">
           {/* Coluna principal */}
           <div>
+            {liberado && (
+              <div className="mb-8">
+                <PlayerCurso modulos={curso.modulos} videos={videos} cor={curso.cor} />
+              </div>
+            )}
+
             <div className="mb-3 flex items-center gap-2">
               <span
                 className="rounded px-2 py-1 text-xs font-extrabold uppercase tracking-widest text-black"
