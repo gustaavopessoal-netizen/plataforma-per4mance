@@ -69,7 +69,7 @@ export function PlayerCurso({
                   {m.titulo}
                 </span>
                 <span className="block text-xs text-neutral-500">
-                  {tem ? m.duracao : "em breve"}
+                  {tem ? `${m.fase} · Dias ${m.dias}` : "vídeo em breve"}
                 </span>
               </span>
               {ativo && (

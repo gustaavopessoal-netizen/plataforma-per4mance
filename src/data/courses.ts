@@ -1,14 +1,30 @@
 // Dados dos 9 protocolos de recuperação esportiva — PER4MANCE by Gustavo Vieira
-// Esta é a "fonte de verdade" do catálogo. Na Fase 4 cada módulo recebe o ID
-// do vídeo no Panda Video (campo `pandaId`).
+// Esta é a "fonte de verdade" do catálogo. Os MÓDULOS são as 6 fichas reais do
+// método (90 dias em 3 fases), vindas de src/data/fichas.ts.
+import { FICHAS, type Exercicio } from "./fichas";
 
+export type { Exercicio };
+
+// Cada módulo = uma FICHA real (15 dias). num 1..6, com fase, dias e exercícios.
 export type Modulo = {
   num: number;
   titulo: string;
-  duracao: string; // ex: "12 min"
-  descricao: string;
-  pandaId?: string; // preenchido na Fase 4 (Panda Video)
+  fase: string; // "Fase 1" | "Fase 2" | "Fase 3"
+  dias: string; // "1-15"
+  exercicios: Exercicio[];
+  pandaId?: string; // preenchido quando o vídeo da ficha é cadastrado no admin
 };
+
+// Monta os 6 módulos (fichas reais) de um protocolo.
+function modulosDe(cursoId: string): Modulo[] {
+  return (FICHAS[cursoId] ?? []).map((f) => ({
+    num: f.num,
+    titulo: f.titulo,
+    fase: f.fase,
+    dias: f.dias,
+    exercicios: f.exercicios,
+  }));
+}
 
 export type Curso = {
   id: string; // slug usado na URL: /curso/joelho
@@ -27,48 +43,6 @@ export type Curso = {
   paraQuem: string[];
   modulos: Modulo[];
 };
-
-// Estrutura padrão de protocolo (6 módulos), com a região costurada no texto.
-function protocolo(regiao: string, focos: string[]): Modulo[] {
-  return [
-    {
-      num: 1,
-      titulo: "Avaliação e Diagnóstico Funcional",
-      duracao: "14 min",
-      descricao: `Como avaliar ${regiao.toLowerCase()} com testes simples e identificar a real origem da dor antes de treinar.`,
-    },
-    {
-      num: 2,
-      titulo: "Controle de Dor e Inflamação",
-      duracao: "11 min",
-      descricao: `Protocolo das primeiras 72h: o que fazer e o que evitar para proteger ${focos[0]}.`,
-    },
-    {
-      num: 3,
-      titulo: "Mobilidade e Amplitude",
-      duracao: "16 min",
-      descricao: `Sequência de mobilidade para recuperar amplitude de movimento sem sobrecarregar ${focos[1]}.`,
-    },
-    {
-      num: 4,
-      titulo: "Fortalecimento Progressivo",
-      duracao: "19 min",
-      descricao: `Progressão de carga em 4 fases para reconstruir força de ${focos[2]} com segurança.`,
-    },
-    {
-      num: 5,
-      titulo: "Estabilidade e Controle Motor",
-      duracao: "15 min",
-      descricao: `Exercícios de estabilização e propriocepção para blindar ${regiao.toLowerCase()} contra recaídas.`,
-    },
-    {
-      num: 6,
-      titulo: "Retorno ao Esporte (Return to Play)",
-      duracao: "13 min",
-      descricao: `Critérios objetivos e testes finais para voltar a treinar e competir com confiança.`,
-    },
-  ];
-}
 
 export const cursos: Curso[] = [
   {
@@ -91,7 +65,7 @@ export const cursos: Curso[] = [
       "Pós-operatório de LCA / menisco (com liberação médica)",
       "Quem sente o joelho 'falhar' em saltos e mudanças de direção",
     ],
-    modulos: protocolo("Joelho", ["a articulação", "a patela", "o quadríceps"]),
+    modulos: modulosDe("joelho"),
   },
   {
     id: "tornozelo",
@@ -111,7 +85,7 @@ export const cursos: Curso[] = [
       "Quem sente instabilidade ao correr em terreno irregular",
       "Pós-entorse buscando retorno seguro ao esporte",
     ],
-    modulos: protocolo("Tornozelo", ["os ligamentos", "a articulação", "a panturrilha"]),
+    modulos: modulosDe("tornozelo"),
   },
   {
     id: "lombar",
@@ -131,7 +105,7 @@ export const cursos: Curso[] = [
       "Atletas de força e levantamento com dor na região",
       "Quem trava a lombar em movimentos simples do dia a dia",
     ],
-    modulos: protocolo("Lombar", ["a coluna", "o quadril", "o core"]),
+    modulos: modulosDe("lombar"),
   },
   {
     id: "posterior",
@@ -151,7 +125,7 @@ export const cursos: Curso[] = [
       "Quem já teve estiramento de posterior de coxa",
       "Pós-lesão buscando voltar a sprintar com segurança",
     ],
-    modulos: protocolo("Posterior de coxa", ["o tendão", "o quadril", "os isquiotibiais"]),
+    modulos: modulosDe("posterior"),
   },
   {
     id: "pubalgia",
@@ -171,7 +145,7 @@ export const cursos: Curso[] = [
       "Atletas com dor na virilha que não passa",
       "Quem já tentou de tudo contra a pubalgia",
     ],
-    modulos: protocolo("Região púbica", ["os adutores", "o quadril", "o core"]),
+    modulos: modulosDe("pubalgia"),
   },
   {
     id: "panturrilha",
@@ -191,7 +165,7 @@ export const cursos: Curso[] = [
       "Quem sofre com câimbras frequentes",
       "Pós-lesão de tendão de Aquiles ou panturrilha",
     ],
-    modulos: protocolo("Panturrilha", ["o tendão de Aquiles", "o tornozelo", "o tríceps sural"]),
+    modulos: modulosDe("panturrilha"),
   },
   {
     id: "quadril",
@@ -211,7 +185,7 @@ export const cursos: Curso[] = [
       "Quem tem dor que vem do quadril e reflete em joelho/lombar",
       "Quem quer mais potência em agachamentos e saltos",
     ],
-    modulos: protocolo("Quadril", ["a articulação", "os glúteos", "os rotadores"]),
+    modulos: modulosDe("quadril"),
   },
   {
     id: "ombro",
@@ -231,7 +205,7 @@ export const cursos: Curso[] = [
       "Quem sente dor ao elevar o braço",
       "Pós-lesão de manguito rotador ou luxação",
     ],
-    modulos: protocolo("Ombro", ["o manguito rotador", "a escápula", "o deltoide"]),
+    modulos: modulosDe("ombro"),
   },
   {
     id: "quadriceps",
@@ -251,7 +225,7 @@ export const cursos: Curso[] = [
       "Quem busca mais potência de salto e arranque",
       "Pós-lesão de quadríceps ou tendão patelar",
     ],
-    modulos: protocolo("Quadríceps", ["o tendão patelar", "o joelho", "a coxa anterior"]),
+    modulos: modulosDe("quadriceps"),
   },
 ];
 

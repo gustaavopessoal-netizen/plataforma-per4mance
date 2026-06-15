@@ -10,6 +10,7 @@ import { getAcessos } from "@/data/entitlements";
 import { AcessosProvider } from "@/components/AcessosProvider";
 import { BotaoComprar } from "@/components/BotaoComprar";
 import { PlayerCurso } from "@/components/PlayerCurso";
+import { Fichas } from "@/components/Fichas";
 import { getVideosDoCurso } from "@/data/videos";
 
 export function generateStaticParams() {
@@ -152,45 +153,17 @@ export default async function CursoPage({
               </ul>
             </div>
 
-            {/* Módulos (episódios) */}
+            {/* Fichas do protocolo — 90 dias / 3 fases */}
             <div className="mt-10">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="font-display text-2xl font-bold uppercase text-white">Módulos</h2>
-                <span className="text-sm text-neutral-400">{curso.modulos.length} aulas</span>
+                <h2 className="font-display text-2xl font-bold uppercase text-white">
+                  Fichas do protocolo
+                </h2>
+                <span className="text-sm text-neutral-400">
+                  {curso.modulos.length} fichas · 90 dias
+                </span>
               </div>
-
-              <ul className="divide-y divide-white/10 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
-                {curso.modulos.map((m) => (
-                  <li
-                    key={m.num}
-                    className="group flex items-center gap-4 p-4 transition-colors hover:bg-white/5"
-                  >
-                    <span className="w-6 shrink-0 text-center font-display text-2xl font-bold text-neutral-500 group-hover:text-white">
-                      {m.num}
-                    </span>
-                    <span
-                      className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-white/5 transition-colors group-hover:bg-white/10"
-                      style={{ color: liberado ? curso.cor : "#7e8694" }}
-                    >
-                      {liberado ? (
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      ) : (
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <rect x="4" y="11" width="16" height="9" rx="2" />
-                          <path d="M8 11V8a4 4 0 0 1 8 0v3" strokeLinecap="round" />
-                        </svg>
-                      )}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-semibold text-neutral-100">{m.titulo}</p>
-                      <p className="truncate text-sm text-neutral-400">{m.descricao}</p>
-                    </div>
-                    <span className="shrink-0 text-sm text-neutral-500">{m.duracao}</span>
-                  </li>
-                ))}
-              </ul>
+              <Fichas modulos={curso.modulos} liberado={liberado} cor={curso.cor} />
             </div>
           </div>
 
