@@ -9,9 +9,9 @@ import { cursoLiberado } from "@/data/access";
 import { getAcessos } from "@/data/entitlements";
 import { AcessosProvider } from "@/components/AcessosProvider";
 import { BotaoComprar } from "@/components/BotaoComprar";
-import { PlayerCurso } from "@/components/PlayerCurso";
+import { ConteudoCurso } from "@/components/ConteudoCurso";
 import { Fichas } from "@/components/Fichas";
-import { getVideosDoCurso } from "@/data/videos";
+import { getModulosPublicos } from "@/data/cms";
 
 export function generateStaticParams() {
   return cursos.map((c) => ({ id: c.id }));
@@ -29,8 +29,8 @@ export default async function CursoPage({
   const relacionados = cursos.filter((c) => c.id !== curso.id).slice(0, 8);
   const acessos = await getAcessos();
   const liberado = cursoLiberado(acessos, curso.id);
-  // Só carrega os vídeos para quem tem acesso (não vaza link p/ não-comprador).
-  const videos = liberado ? await getVideosDoCurso(curso.id) : {};
+  // Conteúdo do curso (CMS). Aulas publicadas; vídeo só vai p/ quem comprou.
+  const modulosCMS = await getModulosPublicos(curso.id, liberado);
 
   // SEGURANÇA: quem NÃO comprou não recebe nem título nem exercícios das fichas
   // (senão dava pra copiar o método pelo código-fonte da página). Só a estrutura.
@@ -109,9 +109,9 @@ export default async function CursoPage({
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_340px]">
           {/* Coluna principal */}
           <div>
-            {liberado && (
+            {(liberado || modulosCMS.length > 0) && (
               <div className="mb-8">
-                <PlayerCurso modulos={curso.modulos} videos={videos} cor={curso.cor} />
+                <ConteudoCurso modulos={modulosCMS} liberado={liberado} cor={curso.cor} />
               </div>
             )}
 

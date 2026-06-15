@@ -3,8 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
 import { getCurso } from "@/data/courses";
-import { getVideosDoCurso } from "@/data/videos";
-import { EditorVideos } from "@/components/EditorVideos";
+import { getModulosAdmin } from "@/data/cms";
+import { AdminCMS } from "@/components/AdminCMS";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +24,7 @@ export default async function AdminCursoPage({
   const curso = getCurso(id);
   if (!curso) notFound();
 
-  const videos = await getVideosDoCurso(curso.id);
+  const modulos = await getModulosAdmin(curso.id);
 
   return (
     <main className="min-h-screen bg-[#0a0b0f] px-4 py-10 md:px-12">
@@ -41,25 +41,21 @@ export default async function AdminCursoPage({
             className="rounded px-2 py-1 text-xs font-extrabold uppercase tracking-widest text-black"
             style={{ background: curso.cor }}
           >
-            Protocolo {curso.num}
+            Conteúdo · Protocolo {curso.num}
           </span>
         </div>
         <h1 className="font-display text-4xl font-extrabold uppercase text-white">
           {curso.regiao} <span style={{ color: curso.cor }}>{curso.tagline}</span>
         </h1>
         <p className="mt-2 max-w-2xl text-neutral-400">
-          Cole o link do <strong className="text-neutral-200">Panda Video</strong> de cada módulo e
-          clique em Salvar. Deixe em branco e salve para remover. O aluno que comprou já assiste na
-          hora.
+          Monte o curso: crie <strong className="text-neutral-200">módulos</strong>, adicione{" "}
+          <strong className="text-neutral-200">aulas</strong>, cole o link do vídeo de cada uma e
+          marque como <strong className="text-neutral-200">Publicado</strong>. O aluno que comprou
+          assiste na hora.
         </p>
 
         <div className="mt-8">
-          <EditorVideos
-            cursoId={curso.id}
-            modulos={curso.modulos}
-            videosIniciais={videos}
-            cor={curso.cor}
-          />
+          <AdminCMS cursoId={curso.id} inicial={modulos} cor={curso.cor} />
         </div>
       </div>
     </main>
