@@ -11,8 +11,9 @@ export default async function ContaPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // RLS já garante que só vêm as mensagens deste usuário.
+  // RLS já garante que só vêm os dados deste usuário.
   let mensagens: { id: string; texto: string; created_at: string }[] = [];
+  let anexos: { id: string; nome: string }[] = [];
   try {
     const { data } = await supabase
       .from("mensagens")
@@ -21,6 +22,15 @@ export default async function ContaPage() {
     mensagens = (data ?? []) as typeof mensagens;
   } catch {
     mensagens = [];
+  }
+  try {
+    const { data } = await supabase
+      .from("anexos")
+      .select("id, nome")
+      .order("created_at", { ascending: false });
+    anexos = (data ?? []) as typeof anexos;
+  } catch {
+    anexos = [];
   }
 
   return (
@@ -43,6 +53,29 @@ export default async function ContaPage() {
                 <p className="mt-2 text-xs text-neutral-500">
                   {new Date(m.created_at).toLocaleString("pt-BR")}
                 </p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <h2 className="mb-3 mt-10 font-display text-2xl font-bold uppercase text-white">
+          Meus materiais
+        </h2>
+        {anexos.length === 0 ? (
+          <p className="text-neutral-500">Nenhum material disponível.</p>
+        ) : (
+          <ul className="divide-y divide-white/10 overflow-hidden rounded-xl border border-white/10">
+            {anexos.map((a) => (
+              <li key={a.id} className="p-3">
+                <a
+                  href={`/api/anexo/${a.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 text-neutral-100 hover:text-per-azul"
+                >
+                  <span>📎</span>
+                  <span className="truncate">{a.nome}</span>
+                </a>
               </li>
             ))}
           </ul>

@@ -145,6 +145,22 @@ export async function getMensagensDoAluno(id: string): Promise<MensagemAdmin[]> 
   }
 }
 
+export type AnexoAluno = { id: string; nome: string; created_at: string };
+
+export async function getAnexosDoAluno(id: string): Promise<AnexoAluno[]> {
+  try {
+    const admin = createAdminClient();
+    const { data } = await admin
+      .from("anexos")
+      .select("id, nome, created_at")
+      .eq("user_id", id)
+      .order("created_at", { ascending: false });
+    return (data ?? []) as AnexoAluno[];
+  } catch {
+    return [];
+  }
+}
+
 export async function getComprasDoAluno(
   id: string,
 ): Promise<{ produto: string; status: string; data: string }[]> {

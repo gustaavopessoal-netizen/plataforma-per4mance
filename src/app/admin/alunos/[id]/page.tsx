@@ -2,8 +2,9 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
-import { getAluno, getComprasDoAluno, getMensagensDoAluno } from "@/data/admin-data";
+import { getAluno, getComprasDoAluno, getMensagensDoAluno, getAnexosDoAluno } from "@/data/admin-data";
 import { GerenciarAluno } from "@/components/GerenciarAluno";
+import { AnexosAluno } from "@/components/AnexosAluno";
 
 export const dynamic = "force-dynamic";
 
@@ -23,9 +24,10 @@ export default async function AlunoDetalhePage({
   const aluno = await getAluno(id);
   if (!aluno) notFound();
 
-  const [compras, mensagens] = await Promise.all([
+  const [compras, mensagens, anexos] = await Promise.all([
     getComprasDoAluno(id),
     getMensagensDoAluno(id),
+    getAnexosDoAluno(id),
   ]);
 
   return (
@@ -68,6 +70,11 @@ export default async function AlunoDetalhePage({
         <div className="mt-8">
           <h2 className="mb-3 font-display text-xl font-bold uppercase text-white">Gerenciar</h2>
           <GerenciarAluno id={aluno.id} emailInicial={aluno.email} />
+        </div>
+
+        {/* Anexos / adendos */}
+        <div className="mt-4">
+          <AnexosAluno userId={aluno.id} inicial={anexos} />
         </div>
 
         {/* Histórico de mensagens enviadas */}
