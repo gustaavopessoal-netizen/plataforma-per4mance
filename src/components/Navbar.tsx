@@ -87,9 +87,13 @@ export function Navbar() {
           )}
           {user ? (
             <div className="flex items-center gap-3">
-              <div className="grid h-9 w-9 place-items-center rounded-full bg-per-azul text-sm font-bold uppercase text-white ring-1 ring-white/20">
+              <Link
+                href="/conta"
+                title="Minha conta"
+                className="grid h-9 w-9 place-items-center rounded-full bg-per-azul text-sm font-bold uppercase text-white ring-1 ring-white/20 transition-transform hover:scale-105"
+              >
                 {(user.email ?? "?").charAt(0)}
-              </div>
+              </Link>
               <button
                 onClick={sair}
                 className="hidden text-sm font-medium text-neutral-300 transition-colors hover:text-white sm:block"

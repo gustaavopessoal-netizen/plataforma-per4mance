@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
@@ -42,12 +43,13 @@ export default async function AlunosPage() {
                 <th className="px-4 py-3">Cadastro</th>
                 <th className="px-4 py-3">Último acesso</th>
                 <th className="px-4 py-3">Compras</th>
+                <th className="px-4 py-3"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               {alunos.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-neutral-500">
+                  <td colSpan={6} className="px-4 py-10 text-center text-neutral-500">
                     Nenhum aluno cadastrado ainda.
                   </td>
                 </tr>
@@ -72,6 +74,14 @@ export default async function AlunosPage() {
                       ) : (
                         <span className="text-xs text-neutral-500">nenhuma</span>
                       )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <Link
+                        href={`/admin/alunos/${a.id}`}
+                        className="text-sm font-semibold text-per-azul hover:underline"
+                      >
+                        Gerenciar →
+                      </Link>
                     </td>
                   </tr>
                 );

@@ -109,3 +109,64 @@ export async function getVendasEResumo(): Promise<{ vendas: Venda[]; resumo: Res
     return { vendas: [], resumo: vazio };
   }
 }
+
+// Detalhe de um aluno.
+export async function getAluno(id: string): Promise<Aluno | null> {
+  try {
+    const admin = createAdminClient();
+    const { data, error } = await admin.auth.admin.getUserById(id);
+    if (error || !data?.user) return null;
+    const u = data.user;
+    return {
+      id: u.id,
+      email: u.email ?? "",
+      nome: (u.user_metadata?.nome as string) ?? "",
+      criadoEm: u.created_at,
+      ultimoLogin: u.last_sign_in_at ?? null,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export type MensagemAdmin = { id: string; texto: string; created_at: string; lida: boolean };
+
+export async function getMensagensDoAluno(id: string): Promise<MensagemAdmin[]> {
+  try {
+    const admin = createAdminClient();
+    const { data } = await admin
+      .from("mensagens")
+      .select("id, texto, created_at, lida")
+      .eq("user_id", id)
+      .order("created_at", { ascending: false });
+    return (data ?? []) as MensagemAdmin[];
+  } catch {
+    return [];
+  }
+}
+
+export async function getComprasDoAluno(
+  id: string,
+): Promise<{ produto: string; status: string; data: string }[]> {
+  try {
+    const admin = createAdminClient();
+    const { data } = await admin
+      .from("compras")
+      .select("tipo, item_id, status, created_at")
+      .eq("user_id", id)
+      .order("created_at", { ascending: false });
+    const linhas = (data ?? []) as {
+      tipo: string;
+      item_id: string | null;
+      status: string;
+      created_at: string;
+    }[];
+    return linhas.map((r) => ({
+      produto: nomeProduto(r.tipo, r.item_id),
+      status: r.status,
+      data: r.created_at,
+    }));
+  } catch {
+    return [];
+  }
+}
