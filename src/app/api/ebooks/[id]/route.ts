@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { getAcessos } from "@/data/entitlements";
-import { ebookLiberado } from "@/data/access";
+import { ebookLiberado, cursoLiberado } from "@/data/access";
 import { ebooks } from "@/data/ebooks";
+import { getCursoIdsDoEbook } from "@/data/ebooks-curso";
 
 // Depende da sessão do usuário → sempre dinâmica, nunca cacheada.
 export const runtime = "nodejs";
@@ -24,10 +25,16 @@ export async function GET(
   const ebook = ebooks.find((e) => e.id === id);
   if (!ebook) return new NextResponse("E-book não encontrado.", { status: 404 });
 
-  // 🔒 gate de verdade: checagem de acesso no servidor
+  // 🔒 gate de verdade: checagem de acesso no servidor.
+  // Libera se: tem a Coleção/comprou o ebook OU tem um curso vinculado a ele.
   const acessos = await getAcessos();
-  if (!ebookLiberado(acessos, id)) {
-    return new NextResponse("Bloqueado — este e-book está incluso na Coleção Completa.", {
+  let permitido = ebookLiberado(acessos, id);
+  if (!permitido) {
+    const cursoIds = await getCursoIdsDoEbook(id);
+    permitido = cursoIds.some((cid) => cursoLiberado(acessos, cid));
+  }
+  if (!permitido) {
+    return new NextResponse("Bloqueado — compre o curso ou a Coleção para baixar este e-book.", {
       status: 403,
     });
   }

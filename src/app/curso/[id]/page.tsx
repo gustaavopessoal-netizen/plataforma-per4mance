@@ -12,6 +12,8 @@ import { BotaoComprar } from "@/components/BotaoComprar";
 import { ConteudoCurso } from "@/components/ConteudoCurso";
 import { Fichas } from "@/components/Fichas";
 import { getModulosPublicos } from "@/data/cms";
+import { getEbookIdsDoCurso } from "@/data/ebooks-curso";
+import { ebooks } from "@/data/ebooks";
 
 export function generateStaticParams() {
   return cursos.map((c) => ({ id: c.id }));
@@ -31,6 +33,13 @@ export default async function CursoPage({
   const liberado = cursoLiberado(acessos, curso.id);
   // Conteúdo do curso (CMS). Aulas publicadas; vídeo só vai p/ quem comprou.
   const modulosCMS = await getModulosPublicos(curso.id, liberado);
+
+  // E-books que acompanham este curso.
+  const ebookIds = await getEbookIdsDoCurso(curso.id);
+  const ebooksDoCurso = ebookIds.flatMap((id) => {
+    const e = ebooks.find((x) => x.id === id);
+    return e ? [e] : [];
+  });
 
   // SEGURANÇA: quem NÃO comprou não recebe nem título nem exercícios das fichas
   // (senão dava pra copiar o método pelo código-fonte da página). Só a estrutura.
@@ -177,6 +186,38 @@ export default async function CursoPage({
               </div>
               <Fichas modulos={modulosVisiveis} liberado={liberado} cor={curso.cor} />
             </div>
+
+            {/* E-books incluídos neste protocolo */}
+            {ebooksDoCurso.length > 0 && (
+              <div className="mt-10">
+                <h2 className="mb-4 font-display text-2xl font-bold uppercase text-white">
+                  E-books incluídos
+                </h2>
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                  {ebooksDoCurso.map((e) => (
+                    <div key={e.id} className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3">
+                      <div className="relative h-20 w-15 shrink-0 overflow-hidden rounded-md" style={{ width: 60 }}>
+                        <Image src={`/ebooks/capas/${e.id}.png`} alt={e.titulo} fill sizes="60px" className={`object-cover ${liberado ? "" : "opacity-50 grayscale"}`} />
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col justify-between">
+                        <p className="text-sm font-semibold leading-tight text-neutral-100">{e.titulo}</p>
+                        {liberado ? (
+                          <a
+                            href={`/api/ebooks/${e.id}`}
+                            download
+                            className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-per-azul hover:underline"
+                          >
+                            ⬇ Baixar PDF
+                          </a>
+                        ) : (
+                          <span className="mt-2 text-xs text-neutral-500">🔒 incluído ao comprar</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Sidebar de compra */}

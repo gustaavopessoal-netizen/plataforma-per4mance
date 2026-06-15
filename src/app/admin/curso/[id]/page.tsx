@@ -5,6 +5,9 @@ import { isAdmin } from "@/lib/admin";
 import { getCurso } from "@/data/courses";
 import { getModulosAdmin } from "@/data/cms";
 import { AdminCMS } from "@/components/AdminCMS";
+import { ebooks } from "@/data/ebooks";
+import { getEbookIdsDoCurso } from "@/data/ebooks-curso";
+import { EbooksDoCurso } from "@/components/EbooksDoCurso";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +28,7 @@ export default async function AdminCursoPage({
   if (!curso) notFound();
 
   const modulos = await getModulosAdmin(curso.id);
+  const ebookIds = await getEbookIdsDoCurso(curso.id);
 
   return (
     <main className="min-h-screen bg-[#0a0b0f] px-4 py-10 md:px-12">
@@ -56,6 +60,14 @@ export default async function AdminCursoPage({
 
         <div className="mt-8">
           <AdminCMS cursoId={curso.id} inicial={modulos} cor={curso.cor} />
+        </div>
+
+        <div className="mt-8">
+          <EbooksDoCurso
+            cursoId={curso.id}
+            todos={ebooks.map((e) => ({ id: e.id, titulo: e.titulo }))}
+            selecionadosIniciais={ebookIds}
+          />
         </div>
       </div>
     </main>
