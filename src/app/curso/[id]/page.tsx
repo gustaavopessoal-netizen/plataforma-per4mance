@@ -31,6 +31,7 @@ export default async function CursoPage({
   const relacionados = cursos.filter((c) => c.id !== curso.id).slice(0, 8);
   const acessos = await getAcessos();
   const liberado = cursoLiberado(acessos, curso.id);
+  const isProtocolo = (curso.categoria ?? "protocolo") === "protocolo";
   // Conteúdo do curso (CMS). Aulas publicadas; vídeo só vai p/ quem comprou.
   const modulosCMS = await getModulosPublicos(curso.id, liberado);
 
@@ -132,7 +133,7 @@ export default async function CursoPage({
                 PER4MANCE Original
               </span>
               <span className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
-                Protocolo {curso.num}
+                {isProtocolo ? `Protocolo ${curso.num}` : "Curso"}
               </span>
             </div>
 
@@ -141,11 +142,19 @@ export default async function CursoPage({
             </h1>
 
             <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-medium text-neutral-300">
-              <span className="font-bold text-emerald-400">98% de recuperação</span>
-              <span className="text-neutral-600">•</span>
+              {isProtocolo && (
+                <>
+                  <span className="font-bold text-emerald-400">98% de recuperação</span>
+                  <span className="text-neutral-600">•</span>
+                </>
+              )}
               <span>{curso.duracaoTotal}</span>
-              <span className="text-neutral-600">•</span>
-              <span>{curso.modulos.length} módulos</span>
+              {isProtocolo && (
+                <>
+                  <span className="text-neutral-600">•</span>
+                  <span>{curso.modulos.length} módulos</span>
+                </>
+              )}
               <span className="text-neutral-600">•</span>
               <span className="rounded border border-white/30 px-1.5 text-xs">{curso.nivel}</span>
             </div>
@@ -174,18 +183,20 @@ export default async function CursoPage({
               </ul>
             </div>
 
-            {/* Fichas do protocolo — 90 dias / 3 fases */}
-            <div className="mt-10">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="font-display text-2xl font-bold uppercase text-white">
-                  Fichas do protocolo
-                </h2>
-                <span className="text-sm text-neutral-400">
-                  {curso.modulos.length} fichas · 90 dias
-                </span>
+            {/* Fichas do protocolo — 90 dias / 3 fases (só protocolos têm fichas) */}
+            {curso.modulos.length > 0 && (
+              <div className="mt-10">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="font-display text-2xl font-bold uppercase text-white">
+                    Fichas do protocolo
+                  </h2>
+                  <span className="text-sm text-neutral-400">
+                    {curso.modulos.length} fichas · 90 dias
+                  </span>
+                </div>
+                <Fichas modulos={modulosVisiveis} liberado={liberado} cor={curso.cor} />
               </div>
-              <Fichas modulos={modulosVisiveis} liberado={liberado} cor={curso.cor} />
-            </div>
+            )}
 
             {/* E-books incluídos neste protocolo */}
             {ebooksDoCurso.length > 0 && (

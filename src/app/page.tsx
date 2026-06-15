@@ -6,7 +6,7 @@ import { Row } from "@/components/Row";
 import { ProgramCard } from "@/components/ProgramCard";
 import { EbookCard } from "@/components/EbookCard";
 import { Footer } from "@/components/Footer";
-import { cursos, getCursos, BUNDLE, formatBRL } from "@/data/courses";
+import { protocolos, cursosProfissionais, getCursos, BUNDLE, formatBRL } from "@/data/courses";
 import { cursoLiberado } from "@/data/access";
 import { getAcessos } from "@/data/entitlements";
 import { AcessosProvider } from "@/components/AcessosProvider";
@@ -45,7 +45,7 @@ export default async function Home() {
           />
         )}
 
-        <CourseRow title="Protocolos de Recuperação • Todos os 9" cursos={cursos} />
+        <CourseRow title="Protocolos de Recuperação • Todos os 9" cursos={protocolos} />
 
         {/* Banner da Coleção Completa */}
         <section id="colecao" className="px-4 py-8 md:px-12">
@@ -103,6 +103,10 @@ export default async function Home() {
           title="Core, Quadril & Coluna"
           cursos={getCursos(["lombar", "pubalgia", "quadril"])}
         />
+
+        {cursosProfissionais.length > 0 && (
+          <CourseRow title="Para Profissionais de Ed. Física" cursos={cursosProfissionais} />
+        )}
       </div>
       </AcessosProvider>
 

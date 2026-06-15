@@ -37,6 +37,7 @@ export type Curso = {
   preco: number; // 97
   duracaoTotal: string;
   nivel: string;
+  categoria?: "protocolo" | "profissional"; // "protocolo" (padrão) = os 9 de recuperação
   destaque?: boolean;
   maisVendido?: boolean;
   descricao: string;
@@ -227,7 +228,32 @@ export const cursos: Curso[] = [
     ],
     modulos: modulosDe("quadriceps"),
   },
+  {
+    id: "avaliacao-360",
+    num: "P1",
+    regiao: "Avaliação 360°",
+    tagline: "Para Profissionais",
+    subtitulo: "Avalie e prescreva treino de qualidade — curso para profissionais de Educação Física",
+    cor: "#1d6fe8",
+    capa: "/produtos/p2.png",
+    preco: 297,
+    duracaoTotal: "Curso completo",
+    nivel: "Profissional",
+    categoria: "profissional",
+    descricao:
+      "Curso para profissionais de Educação Física e personal trainers: aprenda a avaliar seu aluno de ponta a ponta e a prescrever um treino de qualidade, com método e segurança.",
+    paraQuem: [
+      "Personal trainers e profissionais de Educação Física",
+      "Quem quer avaliar e prescrever com método e critério",
+      "Quem busca entregar mais resultado e segurança ao aluno",
+    ],
+    modulos: [],
+  },
 ];
+
+// Subconjuntos por categoria.
+export const protocolos = cursos.filter((c) => (c.categoria ?? "protocolo") === "protocolo");
+export const cursosProfissionais = cursos.filter((c) => c.categoria === "profissional");
 
 export const BUNDLE = {
   titulo: "Coleção Completa PER4MANCE",

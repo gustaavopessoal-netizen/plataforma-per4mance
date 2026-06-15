@@ -13,7 +13,7 @@
 //
 // Tudo nasce FECHADO: sem compra, nada abre. Visitante = ACESSOS_VISITANTE.
 
-import { cursos } from "./courses";
+import { protocolos } from "./courses";
 import { ebooks } from "./ebooks";
 
 export type Acessos = {
@@ -28,7 +28,7 @@ export const ACESSOS_VISITANTE: Acessos = { cursos: [], ebooks: [], colecao: fal
 // Tem a Coleção? Flag direta OU juntou TODOS os protocolos avulsos.
 // Amarrado a `cursos` (catálogo) para nunca dessincronizar com a contagem real.
 export function temColecao(a: Acessos): boolean {
-  return a.colecao || cursos.every((c) => a.cursos.includes(c.id));
+  return a.colecao || protocolos.every((c) => a.cursos.includes(c.id));
 }
 
 // PROTOCOLO liberado para esta carteira?
@@ -46,7 +46,7 @@ export function resumoAcessos(a: Acessos) {
   const colecao = temColecao(a);
   return {
     colecao,
-    totalCursos: colecao ? cursos.length : a.cursos.length,
+    totalCursos: colecao ? protocolos.length : a.cursos.length,
     totalEbooks: colecao ? ebooks.length : a.ebooks.length,
   };
 }
