@@ -36,11 +36,14 @@ export function Fichas({
               </span>
               <div className="min-w-0 flex-1">
                 <p className="truncate font-semibold text-neutral-100">
-                  Ficha {m.num} — {m.titulo}
+                  Ficha {m.num}
+                  {liberado ? ` — ${m.titulo}` : ""}
                 </p>
                 <p className="mt-0.5 text-xs font-medium text-neutral-400">
-                  <span style={{ color: cor }}>{m.fase}</span> · Dias {m.dias} ·{" "}
-                  {m.exercicios.length} exercícios
+                  <span style={{ color: cor }}>{m.fase}</span> · Dias {m.dias}
+                  {liberado
+                    ? ` · ${m.exercicios.length} exercícios`
+                    : " · 🔒 liberado após a compra"}
                 </p>
               </div>
               {liberado ? (

@@ -32,6 +32,18 @@ export default async function CursoPage({
   // Só carrega os vídeos para quem tem acesso (não vaza link p/ não-comprador).
   const videos = liberado ? await getVideosDoCurso(curso.id) : {};
 
+  // SEGURANÇA: quem NÃO comprou não recebe nem título nem exercícios das fichas
+  // (senão dava pra copiar o método pelo código-fonte da página). Só a estrutura.
+  const modulosVisiveis = liberado
+    ? curso.modulos
+    : curso.modulos.map((m) => ({
+        num: m.num,
+        titulo: "",
+        fase: m.fase,
+        dias: m.dias,
+        exercicios: [],
+      }));
+
   return (
     <main className="relative min-h-screen bg-[#0a0b0f]">
       <Navbar />
@@ -163,7 +175,7 @@ export default async function CursoPage({
                   {curso.modulos.length} fichas · 90 dias
                 </span>
               </div>
-              <Fichas modulos={curso.modulos} liberado={liberado} cor={curso.cor} />
+              <Fichas modulos={modulosVisiveis} liberado={liberado} cor={curso.cor} />
             </div>
           </div>
 
