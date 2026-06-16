@@ -69,13 +69,13 @@ export default function LoginPage() {
       <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-per-laranja/10 blur-[130px]" />
 
       <div className="relative w-full max-w-md">
-        <Link href="/" className="mb-8 flex items-center justify-center">
+        <Link href="/" className="mb-6 flex items-center justify-center">
           <Image
             src="/logo.png"
             alt="PER4MANCE"
-            width={56}
-            height={56}
-            className="h-14 w-auto object-contain"
+            width={270}
+            height={480}
+            className="h-48 w-auto object-contain"
           />
         </Link>
 
