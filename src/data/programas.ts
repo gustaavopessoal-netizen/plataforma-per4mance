@@ -32,7 +32,7 @@ export const programas: Programa[] = [
     cor: "#f26d40",
     banner: "/produtos/p1.png",
     badge: "90 dias",
-    externo: false,
+    externo: true,
     url: "https://devoltaaojogo90dias.com",
     cta: "Quero voltar ao jogo",
     destaques: [
@@ -54,8 +54,9 @@ export const programas: Programa[] = [
     cor: "#1d6fe8",
     banner: "/produtos/p2.png",
     badge: "Em breve",
-    externo: false,
-    cta: "Entrar na lista de espera",
+    externo: true,
+    url: "https://wa.me/5531993290622?text=Ol%C3%A1%20Gustavo!%20Quero%20entrar%20na%20fila%20de%20espera%20da%20Avalia%C3%A7%C3%A3o%20360.",
+    cta: "Entrar na fila de espera",
     destaques: [
       "Avaliação física e funcional completa",
       "Mapa de risco de lesão por região",

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { enviarEmailDefinirSenha } from "@/lib/conta";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -82,6 +83,22 @@ export async function POST(request: Request) {
             asaas_payment_id: payment.id,
             status: "confirmado",
           });
+        }
+
+        // Conta nova (criada no checkout de visitante)? Manda o e-mail para o
+        // cliente DEFINIR A SENHA — só uma vez (marca precisa_senha = false).
+        try {
+          const { data: u } = await admin.auth.admin.getUserById(userId);
+          const meta = (u?.user?.user_metadata ?? {}) as { precisa_senha?: boolean };
+          if (u?.user?.email && meta.precisa_senha) {
+            await enviarEmailDefinirSenha(u.user.email);
+            await admin.auth.admin.updateUserById(userId, {
+              user_metadata: { ...u.user.user_metadata, precisa_senha: false },
+            });
+          }
+        } catch {
+          // Falha ao enviar e-mail não pode reverter a liberação do acesso.
+          // O cliente ainda pode usar "esqueci a senha" na tela de login.
         }
       }
     } else if (ESTORNO.has(event)) {

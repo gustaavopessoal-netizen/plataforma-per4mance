@@ -19,6 +19,7 @@ export function BotaoComprar({
   const [aberto, setAberto] = useState(false);
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
+  const [cupom, setCupom] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(false);
 
@@ -47,11 +48,16 @@ export function BotaoComprar({
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itemId, nome, cpf }),
+        body: JSON.stringify({ itemId, nome, cpf, cupom }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Erro ao iniciar o pagamento.");
-      // vai para o checkout hospedado da Asaas
+      // cupom de 100% → acesso liberado na hora, sem pagamento
+      if (data.liberadoDireto) {
+        window.location.href = "/bem-vindo?compra=ok";
+        return;
+      }
+      // senão, vai para o checkout hospedado da Asaas
       window.location.href = data.invoiceUrl;
     } catch (err) {
       setErro(err instanceof Error ? err.message : "Erro ao iniciar o pagamento.");
@@ -103,6 +109,18 @@ export function BotaoComprar({
                   placeholder="000.000.000-00"
                   required
                   className="w-full rounded-lg border border-white/10 bg-[#0a0b0f] px-4 py-3 text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-per-azul"
+                />
+              </label>
+
+              <label className="block">
+                <span className="mb-1.5 block text-sm font-medium text-neutral-300">
+                  Cupom de desconto <span className="text-neutral-500">(opcional)</span>
+                </span>
+                <input
+                  value={cupom}
+                  onChange={(e) => setCupom(e.target.value.toUpperCase())}
+                  placeholder="Ex.: PER4MANCE50"
+                  className="w-full rounded-lg border border-white/10 bg-[#0a0b0f] px-4 py-3 uppercase text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-per-azul"
                 />
               </label>
 

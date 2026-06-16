@@ -9,7 +9,8 @@ import { isAdmin } from "@/lib/admin";
 
 const LINKS = [
   { label: "Início", href: "/" },
-  { label: "Programas", href: "/#programas" },
+  { label: "Profissionais", href: "/#profissionais" },
+  { label: "Atletas", href: "/#atletas" },
   { label: "Protocolos", href: "/#catalogo" },
   { label: "E-books", href: "/#ebooks" },
 ];
