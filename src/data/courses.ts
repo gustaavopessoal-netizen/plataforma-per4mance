@@ -236,7 +236,7 @@ export const cursos: Curso[] = [
     subtitulo: "Avalie e prescreva treino de qualidade — curso para profissionais de Educação Física",
     cor: "#1d6fe8",
     capa: "/produtos/p2.png",
-    preco: 297,
+    preco: 547,
     duracaoTotal: "Curso completo",
     nivel: "Profissional",
     categoria: "profissional",
