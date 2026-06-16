@@ -5,6 +5,9 @@ import Link from "next/link";
 import type { Ebook } from "@/data/ebooks";
 import { ebookLiberado } from "@/data/access";
 import { useAcessos } from "./AcessosProvider";
+import { BotaoComprar } from "./BotaoComprar";
+import { EBOOK_PRECO } from "@/data/products";
+import { formatBRL } from "@/data/courses";
 
 export function EbookCard({ ebook }: { ebook: Ebook }) {
   const capa = `/ebooks/capas/${ebook.id}.png`;
@@ -43,9 +46,9 @@ export function EbookCard({ ebook }: { ebook: Ebook }) {
           </>
         )}
 
-        {/* overlay no hover: baixar (liberado) ou liberar pela Coleção (bloqueado) */}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
-          {liberado ? (
+        {/* overlay no hover: baixar (só p/ quem já tem) */}
+        {liberado && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
             <a
               href={arquivo}
               download
@@ -57,19 +60,8 @@ export function EbookCard({ ebook }: { ebook: Ebook }) {
               </svg>
               Baixar
             </a>
-          ) : (
-            <Link
-              href="/#colecao"
-              className="mx-2 inline-flex flex-col items-center gap-1 rounded-lg bg-per-azul px-3 py-2 text-center text-xs font-bold text-white transition-transform hover:scale-105"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="4" y="11" width="16" height="9" rx="2" />
-                <path d="M8 11V8a4 4 0 0 1 8 0v3" strokeLinecap="round" />
-              </svg>
-              Grátis na Coleção
-            </Link>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* título + ação abaixo da capa */}
@@ -88,16 +80,19 @@ export function EbookCard({ ebook }: { ebook: Ebook }) {
             Baixar PDF
           </a>
         ) : (
-          <Link
-            href="/#colecao"
-            className="mt-0.5 inline-flex items-center gap-1 text-xs font-medium text-neutral-500 transition-colors hover:text-per-azul"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="4" y="11" width="16" height="9" rx="2" />
-              <path d="M8 11V8a4 4 0 0 1 8 0v3" strokeLinecap="round" />
-            </svg>
-            Bloqueado
-          </Link>
+          <div className="mt-1.5 space-y-1.5">
+            <Link
+              href="/#colecao"
+              className="block text-[11px] font-bold text-per-laranja transition-colors hover:underline"
+            >
+              🎁 Grátis na Coleção
+            </Link>
+            <BotaoComprar
+              itemId={ebook.id}
+              label={`Comprar · ${formatBRL(EBOOK_PRECO)}`}
+              className="w-full rounded-lg bg-per-azul px-2 py-1.5 text-xs font-bold text-white transition-transform hover:scale-[1.02]"
+            />
+          </div>
         )}
       </div>
     </div>
