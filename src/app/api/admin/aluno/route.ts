@@ -51,6 +51,16 @@ export async function POST(request: Request) {
         if (error) throw new Error(error.message);
         break;
       }
+      case "excluir": {
+        // não deixa excluir um admin (proteção)
+        const { data: alvo } = await db.auth.admin.getUserById(alunoId);
+        if (isAdmin(alvo?.user?.email)) {
+          return NextResponse.json({ error: "Não é possível excluir um administrador." }, { status: 400 });
+        }
+        const { error } = await db.auth.admin.deleteUser(alunoId);
+        if (error) throw new Error(error.message);
+        break;
+      }
       default:
         return NextResponse.json({ error: "Ação desconhecida." }, { status: 400 });
     }

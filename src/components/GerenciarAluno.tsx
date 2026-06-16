@@ -33,6 +33,31 @@ export function GerenciarAluno({ id, emailInicial }: { id: string; emailInicial:
     }
   }
 
+  async function excluir() {
+    if (
+      !confirm(
+        "Excluir este aluno? Isso apaga a conta, compras, mensagens e anexos dele. Não dá para desfazer.",
+      )
+    )
+      return;
+    setBusy("excluir");
+    setFeedback(null);
+    try {
+      const res = await fetch("/api/admin/aluno", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "excluir", id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error ?? "Erro.");
+      router.push("/admin/alunos");
+      router.refresh();
+    } catch (e) {
+      setFeedback({ campo: "excluir", ok: false, txt: e instanceof Error ? e.message : "Erro." });
+      setBusy("");
+    }
+  }
+
   const fb = (campo: string) =>
     feedback?.campo === campo ? (
       <p className={`mt-2 text-xs ${feedback.ok ? "text-emerald-400" : "text-red-400"}`}>
@@ -99,6 +124,19 @@ export function GerenciarAluno({ id, emailInicial }: { id: string; emailInicial:
           {busy === "mensagem" ? "Enviando..." : "Enviar mensagem"}
         </button>
         {fb("mensagem")}
+      </div>
+
+      {/* Zona de perigo */}
+      <div className="rounded-2xl border border-red-500/30 bg-red-500/5 p-5 md:col-span-2">
+        <p className="mb-2 font-semibold text-red-300">Zona de perigo</p>
+        <button
+          onClick={excluir}
+          disabled={busy === "excluir"}
+          className="rounded-lg border border-red-500/50 px-5 py-2.5 text-sm font-bold text-red-300 transition-colors hover:bg-red-500/15 disabled:opacity-60"
+        >
+          {busy === "excluir" ? "Excluindo..." : "Excluir aluno"}
+        </button>
+        {fb("excluir")}
       </div>
     </div>
   );

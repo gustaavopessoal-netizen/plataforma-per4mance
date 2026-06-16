@@ -9,6 +9,8 @@ export type AulaCMS = {
   video_url: string | null;
   ordem: number;
   publicado: boolean;
+  material_path?: string | null;
+  material_nome?: string | null;
 };
 
 export type ModuloCMS = {
@@ -35,7 +37,9 @@ async function lerModulos(cursoId: string): Promise<ModuloCMS[]> {
     if (ids.length) {
       const { data: a } = await admin
         .from("aulas")
-        .select("id, modulo_id, titulo, descricao, video_url, ordem, publicado")
+        .select(
+          "id, modulo_id, titulo, descricao, video_url, ordem, publicado, material_path, material_nome",
+        )
         .in("modulo_id", ids)
         .order("ordem", { ascending: true });
       aulas = (a ?? []) as AulaCMS[];
@@ -65,7 +69,11 @@ export async function getModulosPublicos(
       ...m,
       aulas: m.aulas
         .filter((a) => a.publicado)
-        .map((a) => ({ ...a, video_url: liberado ? a.video_url : null })),
+        .map((a) => ({
+          ...a,
+          video_url: liberado ? a.video_url : null,
+          material_path: null, // nunca expõe o caminho; download é por rota protegida
+        })),
     }))
     .filter((m) => m.aulas.length > 0);
 }

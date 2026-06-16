@@ -1,7 +1,90 @@
 "use client";
 
-import { useState } from "react";
-import type { ModuloCMS } from "@/data/cms";
+import { useState, useRef } from "react";
+import type { ModuloCMS, AulaCMS } from "@/data/cms";
+import { createClient } from "@/lib/supabase/client";
+
+// Anexo (material) de UMA aula: upload direto pro Storage (signed URL) + remover.
+function MaterialAula({
+  aula,
+  cursoId,
+  onUpdate,
+}: {
+  aula: AulaCMS;
+  cursoId: string;
+  onUpdate: (m: ModuloCMS[]) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const ref = useRef<HTMLInputElement>(null);
+
+  async function enviar(file: File) {
+    setBusy(true);
+    try {
+      const r1 = await fetch("/api/admin/aula-material", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "upload-url", aulaId: aula.id, nome: file.name }),
+      });
+      const d1 = await r1.json();
+      if (!r1.ok) throw new Error(d1.error ?? "Erro.");
+      const supabase = createClient();
+      const { error } = await supabase.storage.from("anexos").uploadToSignedUrl(d1.path, d1.token, file);
+      if (error) throw new Error(error.message);
+      const r2 = await fetch("/api/admin/aula-material", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "salvar", aulaId: aula.id, cursoId, path: d1.path, nome: file.name }),
+      });
+      const d2 = await r2.json();
+      if (!r2.ok) throw new Error(d2.error ?? "Erro.");
+      onUpdate(d2.modulos);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Erro ao enviar material.");
+    } finally {
+      setBusy(false);
+      if (ref.current) ref.current.value = "";
+    }
+  }
+
+  async function remover() {
+    setBusy(true);
+    try {
+      const r = await fetch("/api/admin/aula-material", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "remover", aulaId: aula.id, cursoId }),
+      });
+      const d = await r.json();
+      if (r.ok) onUpdate(d.modulos);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="mt-2 flex items-center gap-2 text-xs">
+      {aula.material_nome ? (
+        <>
+          <span className="truncate text-neutral-300">📎 {aula.material_nome}</span>
+          <button onClick={remover} disabled={busy} className="text-red-400 hover:underline disabled:opacity-50">
+            {busy ? "..." : "remover"}
+          </button>
+        </>
+      ) : (
+        <label className="cursor-pointer text-neutral-400 transition-colors hover:text-white">
+          <input
+            ref={ref}
+            type="file"
+            className="hidden"
+            disabled={busy}
+            onChange={(e) => e.target.files?.[0] && enviar(e.target.files[0])}
+          />
+          {busy ? "enviando..." : "📎 anexar material"}
+        </label>
+      )}
+    </div>
+  );
+}
 
 const btnIcon =
   "grid h-8 w-8 place-items-center rounded-md text-neutral-400 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent";
@@ -132,9 +215,10 @@ export function AdminCMS({
                     (e.target.value.trim() || null) !== a.video_url &&
                     acao({ action: "aula.atualizar", id: a.id, video_url: e.target.value })
                   }
-                  placeholder="🎬 Cole aqui o link/embed do vídeo (Bunny / Panda)"
+                  placeholder="🎬 Cole o link do vídeo (YouTube, Bunny, Panda...)"
                   className="mt-2 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-per-azul"
                 />
+                <MaterialAula aula={a} cursoId={cursoId} onUpdate={setModulos} />
               </div>
             ))}
 

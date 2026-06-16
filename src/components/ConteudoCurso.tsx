@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { ModuloCMS } from "@/data/cms";
+import { toEmbedUrl } from "@/lib/video";
 
 // Conteúdo do curso para o ALUNO: player + índice de módulos/aulas.
 // Vídeo só toca para quem comprou (liberado); senão mostra o índice "trancado".
@@ -34,12 +35,13 @@ export function ConteudoCurso({
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
-      {/* Player */}
-      <div className="relative aspect-video overflow-hidden rounded-xl bg-black ring-1 ring-white/10">
+      {/* Player + material da aula */}
+      <div>
+        <div className="relative aspect-video overflow-hidden rounded-xl bg-black ring-1 ring-white/10">
         {liberado && atual?.video_url ? (
           <iframe
             key={atual.id}
-            src={atual.video_url}
+            src={toEmbedUrl(atual.video_url)}
             className="absolute inset-0 h-full w-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
             allowFullScreen
@@ -64,6 +66,17 @@ export function ConteudoCurso({
               </div>
             )}
           </div>
+        )}
+        </div>
+        {liberado && atual?.material_nome && (
+          <a
+            href={`/api/aula-material/${atual.id}`}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-per-azul hover:underline"
+          >
+            📎 Baixar material: {atual.material_nome}
+          </a>
         )}
       </div>
 
