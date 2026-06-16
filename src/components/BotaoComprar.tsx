@@ -119,7 +119,7 @@ export function BotaoComprar({
                 <input
                   value={cupom}
                   onChange={(e) => setCupom(e.target.value.toUpperCase())}
-                  placeholder="Ex.: PER4MANCE50"
+                  placeholder="Código do cupom (opcional)"
                   className="w-full rounded-lg border border-white/10 bg-[#0a0b0f] px-4 py-3 uppercase text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-per-azul"
                 />
               </label>
