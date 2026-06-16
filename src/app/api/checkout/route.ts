@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { findOrCreateCustomer, createPayment } from "@/lib/asaas";
 import { getProduto } from "@/data/products";
 import { getCupom } from "@/data/cupons";
-import { ensureUserByEmail, enviarEmailDefinirSenha } from "@/lib/conta";
+import { ensureUserByEmail } from "@/lib/conta";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -76,8 +76,18 @@ export async function POST(request: Request) {
     const cupom = getCupom(String(body.cupom ?? ""));
     const admin = createAdminClient();
 
-    // 5a) Cupom de 100% → libera o acesso na hora, SEM cobrança no Asaas.
+    // 5a) Cupom de 100% → CORTESIA: libera na hora SEM cobrança no Asaas.
+    //     Restrito por segurança: SÓ usuário logado E e-mail na allowlist
+    //     (variável de ambiente CUPOM_100_EMAILS, separada por vírgula).
+    //     NUNCA pelo fluxo de visitante — senão qualquer um com o código teria tudo de graça.
     if (cupom && cupom.descontoPct >= 100) {
+      const autorizados = (process.env.CUPOM_100_EMAILS ?? "")
+        .split(",")
+        .map((e) => e.trim().toLowerCase())
+        .filter(Boolean);
+      if (visitante || !user || !autorizados.includes(userEmail.toLowerCase())) {
+        return NextResponse.json({ error: "Este cupom não está disponível." }, { status: 403 });
+      }
       const { error: insErr } = await admin.from("compras").insert({
         user_id: userId,
         tipo: produto.tipo,
@@ -87,14 +97,7 @@ export async function POST(request: Request) {
       });
       // 23505 = já liberado por este cupom antes → ok, segue como sucesso.
       if (insErr && (insErr as { code?: string }).code !== "23505") throw insErr;
-      if (visitante) {
-        try {
-          await enviarEmailDefinirSenha(userEmail);
-        } catch {
-          /* falha no e-mail não bloqueia a liberação */
-        }
-      }
-      return NextResponse.json({ liberadoDireto: true, visitante });
+      return NextResponse.json({ liberadoDireto: true });
     }
 
     // 5b) valor final (metade se cupom de 50%)

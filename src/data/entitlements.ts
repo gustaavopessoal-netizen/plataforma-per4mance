@@ -1,18 +1,11 @@
 import "server-only";
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { ACESSOS_VISITANTE, type Acessos } from "./access";
 
-// ⚠️ PONTE TEMPORÁRIA — removida na Fase 3 (quando o webhook do Asaas passa a
-// preencher a tabela `compras`). Serve para você JÁ conseguir logar e ver a
-// plataforma "liberada" antes do pagamento existir. Compras REAIS sempre vencem
-// esta ponte. Edite os e-mails/itens conforme quiser testar:
-const DEMO_GRANTS: Record<string, Acessos> = {
-  // O dono enxerga tudo (equivale a ter a Coleção Completa):
-  "gustaavopessoal@gmail.com": { cursos: [], ebooks: [], colecao: true },
-  // Exemplos — crie a conta e ajuste:
-  // "ricardo@teste.com": { cursos: ["joelho"], ebooks: [], colecao: false },
-};
+// Dono/admin enxerga tudo pelo mecanismo legítimo (isAdmin), sem backdoor por compra.
+const ACESSO_TOTAL: Acessos = { cursos: [], ebooks: [], colecao: true };
 
 type CompraRow = {
   tipo: "curso" | "ebook" | "colecao";
@@ -50,21 +43,20 @@ export const getAcessos = cache(async (): Promise<Acessos> => {
     } = await supabase.auth.getUser();
     if (!user) return ACESSOS_VISITANTE;
 
+    // Dono/admin vê tudo pelo caminho legítimo (não por backdoor de compra).
+    if (isAdmin(user.email)) return ACESSO_TOTAL;
+
     // SELECT já sob RLS (só as linhas do próprio usuário).
     const { data, error } = await supabase
       .from("compras")
       .select("tipo, item_id, status")
       .eq("status", "confirmado");
 
-    // Tabela ainda não existe (antes da Fase 3) ou erro → ponte demo por e-mail.
-    if (error) return DEMO_GRANTS[user.email ?? ""] ?? ACESSOS_VISITANTE;
+    // Falha de leitura → FECHA tudo (nunca libera acesso por engano).
+    if (error) return ACESSOS_VISITANTE;
 
-    const acessos = fold((data ?? []) as CompraRow[]);
-    const vazio =
-      !acessos.colecao && acessos.cursos.length === 0 && acessos.ebooks.length === 0;
-    if (vazio) return DEMO_GRANTS[user.email ?? ""] ?? ACESSOS_VISITANTE;
-
-    return acessos;
+    // Carteira vazia já resulta em visitante (cursos/ebooks vazios, colecao=false).
+    return fold((data ?? []) as CompraRow[]);
   } catch {
     return ACESSOS_VISITANTE;
   }

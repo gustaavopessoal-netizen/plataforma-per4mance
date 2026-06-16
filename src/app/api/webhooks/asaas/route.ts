@@ -45,16 +45,16 @@ export async function POST(request: Request) {
 
   const admin = createAdminClient();
 
-  // 2) idempotência: se já vimos este evt_id, ignora (a Asaas reenvia).
+  // 2) idempotência: se já PROCESSAMOS este evento, ignora. Aqui só CHECAMOS —
+  //    o registro do evt_id é gravado DEPOIS de liberar com sucesso (senão uma
+  //    falha transitória marcaria como "processado" sem nunca liberar o acesso).
   if (evt.id) {
-    const { error } = await admin
+    const { data: jaVisto } = await admin
       .from("asaas_eventos")
-      .insert({ evt_id: evt.id, event: evt.event ?? null });
-    // 23505 = chave duplicada → reenvio já processado.
-    if (error && (error as { code?: string }).code === "23505") {
-      return NextResponse.json({ ok: true, duplicate: true });
-    }
-    // outros erros (ex.: tabela ainda não criada) → segue sem bloquear.
+      .select("evt_id")
+      .eq("evt_id", evt.id)
+      .maybeSingle();
+    if (jaVisto) return NextResponse.json({ ok: true, duplicate: true });
   }
 
   const event = evt.event ?? "";
@@ -68,21 +68,31 @@ export async function POST(request: Request) {
   try {
     if (PAGO.has(event)) {
       if (userId && tipo) {
-        // atualiza a compra pendente (se houver) ou cria confirmada.
+        // confirma a compra — MAS nunca re-confirma uma já estornada.
         const { data: atualizada } = await admin
           .from("compras")
           .update({ status: "confirmado", user_id: userId, tipo, item_id: itemId || null })
           .eq("asaas_payment_id", payment.id)
+          .neq("status", "estornado")
           .select("id");
 
         if (!atualizada || atualizada.length === 0) {
-          await admin.from("compras").insert({
-            user_id: userId,
-            tipo,
-            item_id: itemId || null,
-            asaas_payment_id: payment.id,
-            status: "confirmado",
-          });
+          // só cria nova linha se NÃO existir nenhuma p/ esse pagamento
+          // (evita re-liberar uma compra estornada por um evento tardio).
+          const { data: existe } = await admin
+            .from("compras")
+            .select("id")
+            .eq("asaas_payment_id", payment.id)
+            .limit(1);
+          if (!existe || existe.length === 0) {
+            await admin.from("compras").insert({
+              user_id: userId,
+              tipo,
+              item_id: itemId || null,
+              asaas_payment_id: payment.id,
+              status: "confirmado",
+            });
+          }
         }
 
         // Conta nova (criada no checkout de visitante)? Manda o e-mail para o
@@ -110,8 +120,14 @@ export async function POST(request: Request) {
     }
     // demais eventos: apenas confirma recebimento.
   } catch {
-    // erro ao persistir → 500 faz a Asaas reenviar depois.
+    // erro ao persistir → 500 faz a Asaas reenviar (evt_id ainda NÃO foi gravado,
+    // então o reenvio reexecuta a liberação normalmente).
     return new NextResponse("erro ao processar", { status: 500 });
+  }
+
+  // marca o evento como processado SÓ agora — depois de liberar/estornar com sucesso.
+  if (evt.id) {
+    await admin.from("asaas_eventos").insert({ evt_id: evt.id, event: evt.event ?? null });
   }
 
   return NextResponse.json({ ok: true });

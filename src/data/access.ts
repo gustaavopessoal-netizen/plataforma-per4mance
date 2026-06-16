@@ -32,8 +32,11 @@ export function temColecao(a: Acessos): boolean {
 }
 
 // PROTOCOLO liberado para esta carteira?
+// A Coleção / os 9 protocolos liberam APENAS protocolos. Cursos de outra
+// categoria (ex.: profissional, como a Avaliação 360) só abrem se comprados avulsos.
 export function cursoLiberado(a: Acessos, id: string): boolean {
-  return temColecao(a) || a.cursos.includes(id);
+  const ehProtocolo = protocolos.some((c) => c.id === id);
+  return (ehProtocolo && temColecao(a)) || a.cursos.includes(id);
 }
 
 // E-BOOK liberado? (ter a Coleção libera todos os e-books de bônus)
