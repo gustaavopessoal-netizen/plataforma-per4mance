@@ -170,17 +170,45 @@ function Campo({
   placeholder?: string;
   required?: boolean;
 }) {
+  const [mostrar, setMostrar] = useState(false);
+  const isSenha = type === "password";
+  const tipoReal = isSenha && mostrar ? "text" : type;
+
   return (
     <label className="block">
       <span className="mb-1.5 block text-sm font-medium text-neutral-300">{label}</span>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        required={required}
-        className="w-full rounded-lg border border-white/10 bg-[#0a0b0f] px-4 py-3 text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-per-azul"
-      />
+      <div className="relative">
+        <input
+          type={tipoReal}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          required={required}
+          className={`w-full rounded-lg border border-white/10 bg-[#0a0b0f] px-4 py-3 text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-per-azul ${
+            isSenha ? "pr-11" : ""
+          }`}
+        />
+        {isSenha && (
+          <button
+            type="button"
+            onClick={() => setMostrar((m) => !m)}
+            aria-label={mostrar ? "Ocultar senha" : "Mostrar senha"}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 transition-colors hover:text-white"
+          >
+            {mostrar ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c6.5 0 10 7 10 7a13.2 13.2 0 0 1-1.67 2.68M6.06 6.06A13.2 13.2 0 0 0 2 12s3.5 7 10 7a9.12 9.12 0 0 0 4.94-1.44" strokeLinecap="round" />
+                <path d="m2 2 20 20" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            )}
+          </button>
+        )}
+      </div>
     </label>
   );
 }
