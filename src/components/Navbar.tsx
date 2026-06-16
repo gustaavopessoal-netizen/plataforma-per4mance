@@ -18,6 +18,7 @@ export function Navbar() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [mentor, setMentor] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -34,6 +35,20 @@ export function Navbar() {
     });
     return () => sub.subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setMentor(false);
+      return;
+    }
+    const supabase = createClient();
+    supabase
+      .from("mentoria_membros")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => setMentor(!!data));
+  }, [user]);
 
   async function sair() {
     const supabase = createClient();
@@ -65,6 +80,13 @@ export function Navbar() {
               </Link>
             </li>
           ))}
+          {mentor && (
+            <li>
+              <Link href="/mentoria" className="font-bold text-per-laranja transition-colors hover:text-per-laranja/80">
+                Mentoria
+              </Link>
+            </li>
+          )}
         </ul>
 
         <div className="ml-auto flex items-center gap-4">

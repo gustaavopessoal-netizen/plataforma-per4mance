@@ -37,8 +37,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Requisição inválida." }, { status: 400 });
   }
 
-  const curso = getCurso(String(b.cursoId ?? ""));
-  if (!curso) return NextResponse.json({ error: "Curso inválido." }, { status: 400 });
+  const cursoId = String(b.cursoId ?? "");
+  // aceita os cursos do catálogo + a área especial "mentoria"
+  if (!getCurso(cursoId) && cursoId !== "mentoria") {
+    return NextResponse.json({ error: "Área inválida." }, { status: 400 });
+  }
 
   const db = createAdminClient();
 
@@ -65,8 +68,8 @@ export async function POST(request: Request) {
   try {
     switch (b.action) {
       case "modulo.criar": {
-        const ordem = await proximaOrdem("modulos", "curso_id", curso.id);
-        await db.from("modulos").insert({ curso_id: curso.id, titulo: (b.titulo ?? "Novo módulo").trim() || "Novo módulo", ordem });
+        const ordem = await proximaOrdem("modulos", "curso_id", cursoId);
+        await db.from("modulos").insert({ curso_id: cursoId, titulo: (b.titulo ?? "Novo módulo").trim() || "Novo módulo", ordem });
         break;
       }
       case "modulo.renomear":
@@ -76,7 +79,7 @@ export async function POST(request: Request) {
         await db.from("modulos").delete().eq("id", b.id);
         break;
       case "modulo.mover":
-        await mover("modulos", { curso_id: curso.id }, String(b.id), b.dir ?? "up");
+        await mover("modulos", { curso_id: cursoId }, String(b.id), b.dir ?? "up");
         break;
       case "aula.criar": {
         const ordem = await proximaOrdem("aulas", "modulo_id", String(b.moduloId));
@@ -102,7 +105,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Ação desconhecida." }, { status: 400 });
     }
 
-    const modulos = await getModulosAdmin(curso.id);
+    const modulos = await getModulosAdmin(cursoId);
     return NextResponse.json({ ok: true, modulos });
   } catch (e) {
     return NextResponse.json({ error: e instanceof Error ? e.message : "Erro." }, { status: 500 });

@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getAcessos } from "@/data/entitlements";
 import { cursoLiberado } from "@/data/access";
 import { isAdmin } from "@/lib/admin";
+import { isMentor } from "@/data/mentoria";
 import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
@@ -34,7 +35,9 @@ export async function GET(_request: Request, { params }: { params: Promise<{ aul
   const cursoId = (mod?.curso_id as string) ?? "";
 
   const acessos = await getAcessos();
-  if (!cursoLiberado(acessos, cursoId) && !isAdmin(user.email)) {
+  const permitido =
+    cursoId === "mentoria" ? await isMentor(user.id) : cursoLiberado(acessos, cursoId);
+  if (!permitido && !isAdmin(user.email)) {
     return new NextResponse("Sem acesso a este material.", { status: 403 });
   }
 

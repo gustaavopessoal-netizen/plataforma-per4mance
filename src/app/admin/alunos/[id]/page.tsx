@@ -5,6 +5,7 @@ import { isAdmin } from "@/lib/admin";
 import { getAluno, getComprasDoAluno, getMensagensDoAluno, getAnexosDoAluno } from "@/data/admin-data";
 import { GerenciarAluno } from "@/components/GerenciarAluno";
 import { AnexosAluno } from "@/components/AnexosAluno";
+import { isMentor } from "@/data/mentoria";
 
 export const dynamic = "force-dynamic";
 
@@ -24,10 +25,11 @@ export default async function AlunoDetalhePage({
   const aluno = await getAluno(id);
   if (!aluno) notFound();
 
-  const [compras, mensagens, anexos] = await Promise.all([
+  const [compras, mensagens, anexos, mentor] = await Promise.all([
     getComprasDoAluno(id),
     getMensagensDoAluno(id),
     getAnexosDoAluno(id),
+    isMentor(id),
   ]);
 
   return (
@@ -69,7 +71,7 @@ export default async function AlunoDetalhePage({
         {/* Gestão */}
         <div className="mt-8">
           <h2 className="mb-3 font-display text-xl font-bold uppercase text-white">Gerenciar</h2>
-          <GerenciarAluno id={aluno.id} emailInicial={aluno.email} />
+          <GerenciarAluno id={aluno.id} emailInicial={aluno.email} mentorInicial={mentor} />
         </div>
 
         {/* Anexos / adendos */}

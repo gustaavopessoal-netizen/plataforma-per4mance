@@ -3,9 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function GerenciarAluno({ id, emailInicial }: { id: string; emailInicial: string }) {
+export function GerenciarAluno({
+  id,
+  emailInicial,
+  mentorInicial,
+}: {
+  id: string;
+  emailInicial: string;
+  mentorInicial: boolean;
+}) {
   const router = useRouter();
   const [email, setEmail] = useState(emailInicial);
+  const [mentor, setMentor] = useState(mentorInicial);
   const [senha, setSenha] = useState("");
   const [msg, setMsg] = useState("");
   const [feedback, setFeedback] = useState<{ campo: string; ok: boolean; txt: string } | null>(null);
@@ -54,6 +63,26 @@ export function GerenciarAluno({ id, emailInicial }: { id: string; emailInicial:
       router.refresh();
     } catch (e) {
       setFeedback({ campo: "excluir", ok: false, txt: e instanceof Error ? e.message : "Erro." });
+      setBusy("");
+    }
+  }
+
+  async function toggleMentoria() {
+    setBusy("mentoria");
+    setFeedback(null);
+    try {
+      const res = await fetch("/api/admin/aluno", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "mentoria", id, liberar: !mentor }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error ?? "Erro.");
+      setMentor(!mentor);
+      setFeedback({ campo: "mentoria", ok: true, txt: !mentor ? "Mentoria liberada!" : "Mentoria removida." });
+    } catch (e) {
+      setFeedback({ campo: "mentoria", ok: false, txt: e instanceof Error ? e.message : "Erro." });
+    } finally {
       setBusy("");
     }
   }
@@ -124,6 +153,26 @@ export function GerenciarAluno({ id, emailInicial }: { id: string; emailInicial:
           {busy === "mensagem" ? "Enviando..." : "Enviar mensagem"}
         </button>
         {fb("mensagem")}
+      </div>
+
+      {/* Mentoria */}
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
+        <p className="mb-1 font-semibold text-white">Acesso à Mentoria</p>
+        <p className="mb-3 text-sm text-neutral-400">
+          {mentor ? "✅ Este aluno É membro da Mentoria." : "Este aluno NÃO é membro da Mentoria."}
+        </p>
+        <button
+          onClick={toggleMentoria}
+          disabled={busy === "mentoria"}
+          className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-transform hover:scale-[1.02] disabled:opacity-60 ${
+            mentor
+              ? "border border-white/20 text-neutral-200 hover:bg-white/5"
+              : "bg-per-laranja text-black"
+          }`}
+        >
+          {busy === "mentoria" ? "..." : mentor ? "Remover da Mentoria" : "Liberar Mentoria"}
+        </button>
+        {fb("mentoria")}
       </div>
 
       {/* Zona de perigo */}

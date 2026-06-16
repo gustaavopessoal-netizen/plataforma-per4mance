@@ -56,6 +56,9 @@ export default async function AdminHome() {
           <Link href="/admin/alunos" className="rounded-lg border border-white/15 px-4 py-2 text-sm font-semibold text-neutral-200 transition-colors hover:bg-white/5">
             Ver alunos →
           </Link>
+          <Link href="/admin/mentoria" className="rounded-lg border border-per-laranja/50 bg-per-laranja/10 px-4 py-2 text-sm font-semibold text-per-laranja transition-colors hover:bg-per-laranja/20">
+            🎓 Mentoria →
+          </Link>
         </div>
 
         {/* Conteúdo dos cursos */}

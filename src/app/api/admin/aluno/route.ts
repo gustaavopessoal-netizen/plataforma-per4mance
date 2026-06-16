@@ -16,7 +16,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Sem permissão." }, { status: 403 });
   }
 
-  let b: { action?: string; id?: string; email?: string; password?: string; texto?: string };
+  let b: {
+    action?: string;
+    id?: string;
+    email?: string;
+    password?: string;
+    texto?: string;
+    liberar?: boolean;
+  };
   try {
     b = await request.json();
   } catch {
@@ -59,6 +66,14 @@ export async function POST(request: Request) {
         }
         const { error } = await db.auth.admin.deleteUser(alunoId);
         if (error) throw new Error(error.message);
+        break;
+      }
+      case "mentoria": {
+        if (b.liberar) {
+          await db.from("mentoria_membros").upsert({ user_id: alunoId });
+        } else {
+          await db.from("mentoria_membros").delete().eq("user_id", alunoId);
+        }
         break;
       }
       default:

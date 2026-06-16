@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
+import { isMentor } from "@/data/mentoria";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +12,8 @@ export default async function ContaPage() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+
+  const mentor = await isMentor(user.id);
 
   // RLS já garante que só vêm os dados deste usuário.
   let mensagens: { id: string; texto: string; created_at: string }[] = [];
@@ -39,6 +43,15 @@ export default async function ContaPage() {
       <div className="mx-auto max-w-2xl px-4 pb-16 pt-28 md:px-6">
         <h1 className="font-display text-4xl font-extrabold uppercase text-white">Minha conta</h1>
         <p className="mt-1 text-neutral-400">{user.email}</p>
+
+        {mentor && (
+          <Link
+            href="/mentoria"
+            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-per-laranja px-5 py-3 font-bold text-black transition-transform hover:scale-[1.02]"
+          >
+            🎓 Acessar a Mentoria
+          </Link>
+        )}
 
         <h2 className="mb-3 mt-10 font-display text-2xl font-bold uppercase text-white">
           Mensagens
