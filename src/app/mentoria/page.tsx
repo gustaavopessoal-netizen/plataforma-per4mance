@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isMentor } from "@/data/mentoria";
 import { getModulosPublicos } from "@/data/cms";
 import { ConteudoCurso } from "@/components/ConteudoCurso";
+import { ForumMentoria } from "@/components/ForumMentoria";
 
 export const dynamic = "force-dynamic";
 
@@ -49,9 +50,20 @@ export default async function MentoriaPage() {
             </Link>
           </div>
         ) : (
-          <div className="mt-8">
-            <ConteudoCurso modulos={modulos} liberado={true} cor="#f26d40" />
-          </div>
+          <>
+            <div className="mt-8">
+              <ConteudoCurso modulos={modulos} liberado={true} cor="#f26d40" />
+            </div>
+            <div className="mt-12">
+              <h2 className="mb-1 font-display text-3xl font-extrabold uppercase text-white">
+                Grupo da Mentoria
+              </h2>
+              <p className="mb-4 text-sm text-neutral-400">
+                Tire dúvidas e troque ideias com os outros mentorados.
+              </p>
+              <ForumMentoria />
+            </div>
+          </>
         )}
       </div>
     </main>
