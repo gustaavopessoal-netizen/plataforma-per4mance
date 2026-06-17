@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { cursos } from "@/data/courses";
+import { protocolos } from "@/data/courses";
 import { programas } from "@/data/programas";
 import { ebooks } from "@/data/ebooks";
 
 export function Hero() {
   const stats = [
-    { num: cursos.length, label: "Protocolos" },
+    { num: protocolos.length, label: "Protocolos" },
     { num: programas.length, label: "Programas" },
     { num: ebooks.length, label: "E-books" },
   ];
