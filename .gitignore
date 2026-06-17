@@ -43,3 +43,6 @@ next-env.d.ts
 # previews temporarios
 _*.html
 _*.png
+
+# pasta temporária de geração de capas
+_capas/
