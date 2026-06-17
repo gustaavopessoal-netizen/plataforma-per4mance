@@ -7,7 +7,7 @@ import { ProgramCard } from "@/components/ProgramCard";
 import { ProgramaBanner } from "@/components/ProgramaBanner";
 import { EbookCard } from "@/components/EbookCard";
 import { Footer } from "@/components/Footer";
-import { protocolos, cursosProfissionais, getCursos, BUNDLE, formatBRL } from "@/data/courses";
+import { protocolos, cursosProfissionais, getCursos, BUNDLE, BUNDLE_PROF, COLECAO_PROF_ID, formatBRL } from "@/data/courses";
 import { cursoLiberado } from "@/data/access";
 import { getAcessos } from "@/data/entitlements";
 import { AcessosProvider } from "@/components/AcessosProvider";
@@ -86,6 +86,44 @@ export default async function Home() {
           {cursosProfissionais.length > 0 && (
             <CourseRow title="Cursos para Profissionais de Ed. Física" cursos={cursosProfissionais} />
           )}
+
+          {/* Combo Profissional — leve TODOS os cursos de profissional por menos */}
+          {cursosProfissionais.length > 1 && (
+            <section id="colecao-prof" className="scroll-mt-20 px-4 py-8 md:px-12">
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-r from-per-azul/30 via-[#10131b] to-[#0a0b0f] p-6 sm:p-8 md:p-12">
+                <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-per-azul/20 blur-3xl" />
+                <div className="relative max-w-2xl">
+                  <span className="text-xs font-bold uppercase tracking-widest text-per-azul">
+                    Combo para profissionais
+                  </span>
+                  <h3 className="mt-2 font-display text-3xl font-extrabold uppercase leading-none text-white sm:text-4xl md:text-5xl">
+                    {BUNDLE_PROF.titulo}
+                  </h3>
+                  <p className="mt-3 text-neutral-300">
+                    {BUNDLE_PROF.subtitulo} São {BUNDLE_PROF.qtd} cursos — compre tudo junto e economize.
+                  </p>
+
+                  <div className="mt-5 flex flex-wrap items-end gap-4">
+                    <div>
+                      <p className="text-sm text-neutral-400 line-through">
+                        {formatBRL(BUNDLE_PROF.precoDe)}
+                      </p>
+                      <p className="font-display text-4xl font-extrabold text-white">
+                        {formatBRL(BUNDLE_PROF.preco)}
+                      </p>
+                      <p className="text-sm text-neutral-400">ou {BUNDLE_PROF.parcelas}</p>
+                    </div>
+                    <BotaoComprar
+                      itemId={COLECAO_PROF_ID}
+                      label={`Liberar os ${BUNDLE_PROF.qtd} cursos`}
+                      className="inline-flex items-center gap-2 rounded-lg bg-white px-7 py-3 font-bold text-black transition-transform hover:scale-105"
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
           <Row title="E-books para Profissionais" anchor="ebooks-prof">
             {ebooksTreinador.map((e) => (
               <EbookCard key={e.id} ebook={e} />

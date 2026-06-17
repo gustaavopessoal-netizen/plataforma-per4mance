@@ -368,6 +368,23 @@ export const BUNDLE = {
   parcelas: "10x de R$ 54,70",
 };
 
+// Combo dos cursos PROFISSIONAIS (mesma ideia da Coleção, mas para o público de
+// Educação Física). Comprar tudo junto sai MUITO mais barato que avulso.
+// É registrado como tipo "curso" com este item_id especial (ver products.ts /
+// access.ts) — não precisa mexer no banco.
+export const COLECAO_PROF_ID = "colecao-prof";
+const PRECO_PROF_AVULSO = cursosProfissionais.reduce((s, c) => s + c.preco, 0);
+export const BUNDLE_PROF = {
+  id: COLECAO_PROF_ID,
+  titulo: "Combo Profissional PER4MANCE",
+  subtitulo: "Todos os cursos para profissionais de Educação Física num acesso só.",
+  preco: 997,
+  precoDe: PRECO_PROF_AVULSO,
+  parcelas: "10x de R$ 99,70",
+  // quantos cursos entram no combo (para textos)
+  qtd: cursosProfissionais.length,
+};
+
 export function getCurso(id: string): Curso | undefined {
   return cursos.find((c) => c.id === id);
 }

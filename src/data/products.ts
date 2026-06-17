@@ -1,4 +1,4 @@
-import { cursos, BUNDLE } from "./courses";
+import { cursos, BUNDLE, BUNDLE_PROF, COLECAO_PROF_ID } from "./courses";
 import { ebooks } from "./ebooks";
 
 // Preço do e-book avulso (R$ 14,99).
@@ -16,6 +16,11 @@ export type Produto = {
 export function getProduto(itemId: string): Produto | null {
   if (itemId === "colecao") {
     return { tipo: "colecao", value: BUNDLE.preco, nome: BUNDLE.titulo, itemId: null };
+  }
+  // Combo profissional: registra como "curso" com item_id especial — o acesso
+  // (access.ts) reconhece esse id e libera TODOS os cursos profissionais.
+  if (itemId === COLECAO_PROF_ID) {
+    return { tipo: "curso", value: BUNDLE_PROF.preco, nome: BUNDLE_PROF.titulo, itemId: COLECAO_PROF_ID };
   }
   const c = cursos.find((x) => x.id === itemId);
   if (c) {

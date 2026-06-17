@@ -1,6 +1,6 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { BUNDLE, getCurso } from "@/data/courses";
+import { BUNDLE, BUNDLE_PROF, COLECAO_PROF_ID, getCurso } from "@/data/courses";
 import { ebooks } from "@/data/ebooks";
 import { EBOOK_PRECO } from "@/data/products";
 
@@ -31,6 +31,7 @@ export type Resumo = {
 
 function valorDe(tipo: string, itemId: string | null): number {
   if (tipo === "colecao") return BUNDLE.preco;
+  if (itemId === COLECAO_PROF_ID) return BUNDLE_PROF.preco;
   if (tipo === "curso" && itemId) return getCurso(itemId)?.preco ?? 0;
   if (tipo === "ebook") return EBOOK_PRECO;
   return 0;
@@ -38,6 +39,7 @@ function valorDe(tipo: string, itemId: string | null): number {
 
 function nomeProduto(tipo: string, itemId: string | null): string {
   if (tipo === "colecao") return BUNDLE.titulo;
+  if (itemId === COLECAO_PROF_ID) return BUNDLE_PROF.titulo;
   if (tipo === "curso" && itemId) {
     const c = getCurso(itemId);
     return c ? `Protocolo ${c.regiao}` : itemId;

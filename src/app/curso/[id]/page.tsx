@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { CourseRow } from "@/components/CourseRow";
 import { Footer } from "@/components/Footer";
-import { cursos, getCurso, formatBRL } from "@/data/courses";
-import { cursoLiberado } from "@/data/access";
+import { cursos, getCurso, formatBRL, BUNDLE_PROF, COLECAO_PROF_ID } from "@/data/courses";
+import { cursoLiberado, temColecao, temColecaoProf } from "@/data/access";
 import { getAcessos } from "@/data/entitlements";
 import { AcessosProvider } from "@/components/AcessosProvider";
 import { BotaoComprar } from "@/components/BotaoComprar";
@@ -251,7 +251,7 @@ export default async function CursoPage({
                     </svg>
                     Você tem acesso
                   </span>
-                  <p className="mt-3 text-sm text-neutral-400">Acesso vitalício liberado a este protocolo.</p>
+                  <p className="mt-3 text-sm text-neutral-400">Acesso vitalício liberado a este {isProtocolo ? "protocolo" : "curso"}.</p>
                   <button
                     className="mt-5 w-full rounded-lg py-3 font-bold text-black transition-transform hover:scale-[1.02]"
                     style={{ background: curso.cor }}
@@ -261,7 +261,7 @@ export default async function CursoPage({
                 </>
               ) : (
                 <>
-                  <p className="text-sm text-neutral-400">Acesso vitalício a este protocolo</p>
+                  <p className="text-sm text-neutral-400">Acesso vitalício a este {isProtocolo ? "protocolo" : "curso"}</p>
                   <p className="mt-1 font-display text-4xl font-extrabold text-white">
                     {formatBRL(curso.preco)}
                   </p>
@@ -279,18 +279,41 @@ export default async function CursoPage({
                 </>
               )}
 
-              <div className="mt-6 border-t border-white/10 pt-5">
-                <p className="text-sm font-semibold text-white">Quer todos os 9 protocolos?</p>
-                <p className="mt-1 text-sm text-neutral-400">
-                  Garanta a Coleção Completa por R$ 547 (10x R$ 54,70).
-                </p>
-                <Link
-                  href="/#colecao"
-                  className="mt-3 block rounded-lg border border-white/15 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-white/5"
-                >
-                  Ver a Coleção Completa
-                </Link>
-              </div>
+              {/* Upsell do MESMO público: protocolo → Coleção de atleta;
+                  curso profissional → Combo Profissional. Some quando já é dono. */}
+              {isProtocolo
+                ? !temColecao(acessos) && (
+                    <div className="mt-6 border-t border-white/10 pt-5">
+                      <p className="text-sm font-semibold text-white">Quer todos os 9 protocolos?</p>
+                      <p className="mt-1 text-sm text-neutral-400">
+                        Garanta a Coleção Completa por R$ 547 (10x R$ 54,70).
+                      </p>
+                      <Link
+                        href="/#colecao"
+                        className="mt-3 block rounded-lg border border-white/15 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-white/5"
+                      >
+                        Ver a Coleção Completa
+                      </Link>
+                    </div>
+                  )
+                : !temColecaoProf(acessos) && (
+                    <div className="mt-6 border-t border-white/10 pt-5">
+                      <p className="text-sm font-semibold text-white">
+                        Não quer só este? Leve os {BUNDLE_PROF.qtd} cursos para profissionais.
+                      </p>
+                      <p className="mt-1 text-sm text-neutral-400">
+                        {BUNDLE_PROF.titulo} por{" "}
+                        <span className="font-bold text-white">{formatBRL(BUNDLE_PROF.preco)}</span>{" "}
+                        ({BUNDLE_PROF.parcelas}) — em vez de{" "}
+                        <span className="line-through">{formatBRL(BUNDLE_PROF.precoDe)}</span> avulso.
+                      </p>
+                      <BotaoComprar
+                        itemId={COLECAO_PROF_ID}
+                        label={`Liberar os ${BUNDLE_PROF.qtd} cursos`}
+                        className="mt-3 block w-full rounded-lg border border-per-azul/50 bg-per-azul/15 py-2.5 text-center text-sm font-bold text-per-azul transition-colors hover:bg-per-azul/25"
+                      />
+                    </div>
+                  )}
             </div>
           </aside>
         </div>

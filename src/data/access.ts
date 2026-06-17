@@ -13,7 +13,7 @@
 //
 // Tudo nasce FECHADO: sem compra, nada abre. Visitante = ACESSOS_VISITANTE.
 
-import { protocolos } from "./courses";
+import { protocolos, cursosProfissionais, COLECAO_PROF_ID } from "./courses";
 import { ebooks } from "./ebooks";
 
 export type Acessos = {
@@ -31,12 +31,26 @@ export function temColecao(a: Acessos): boolean {
   return a.colecao || protocolos.every((c) => a.cursos.includes(c.id));
 }
 
-// PROTOCOLO liberado para esta carteira?
-// A Coleção / os 9 protocolos liberam APENAS protocolos. Cursos de outra
-// categoria (ex.: profissional, como a Avaliação 360) só abrem se comprados avulsos.
+// Tem o Combo Profissional? Flag direta (item_id especial) OU juntou TODOS os
+// cursos profissionais avulsos.
+export function temColecaoProf(a: Acessos): boolean {
+  return (
+    a.cursos.includes(COLECAO_PROF_ID) ||
+    (cursosProfissionais.length > 0 && cursosProfissionais.every((c) => a.cursos.includes(c.id)))
+  );
+}
+
+// CURSO liberado para esta carteira?
+//  - protocolos de atleta: abrem com a Coleção dos 9 ou comprados avulsos;
+//  - cursos profissionais: abrem com o Combo Profissional ou comprados avulsos.
 export function cursoLiberado(a: Acessos, id: string): boolean {
   const ehProtocolo = protocolos.some((c) => c.id === id);
-  return (ehProtocolo && temColecao(a)) || a.cursos.includes(id);
+  const ehProf = cursosProfissionais.some((c) => c.id === id);
+  return (
+    (ehProtocolo && temColecao(a)) ||
+    (ehProf && temColecaoProf(a)) ||
+    a.cursos.includes(id)
+  );
 }
 
 // E-BOOK liberado? (ter a Coleção libera todos os e-books de bônus)

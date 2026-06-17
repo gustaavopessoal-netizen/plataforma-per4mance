@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProduto } from "@/data/products";
-import { getCurso, BUNDLE, protocolos, formatBRL } from "@/data/courses";
+import { getCurso, BUNDLE, BUNDLE_PROF, COLECAO_PROF_ID, protocolos, formatBRL } from "@/data/courses";
 import { CheckoutGuest } from "@/components/CheckoutGuest";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +16,15 @@ function display(id: string) {
       cor: "#1d6fe8",
       parcelas: BUNDLE.parcelas,
       capa: "/produtos/p1.png" as string | null,
+    };
+  }
+  if (id === COLECAO_PROF_ID) {
+    return {
+      titulo: BUNDLE_PROF.titulo,
+      sub: BUNDLE_PROF.subtitulo,
+      cor: "#1d6fe8",
+      parcelas: BUNDLE_PROF.parcelas,
+      capa: "/produtos/avaliacao-postural.png" as string | null,
     };
   }
   const c = getCurso(id);
@@ -42,6 +51,29 @@ export default async function ComprarPage({
   if (!produto || !info) notFound();
 
   const ehColecao = id === "colecao";
+  const ehColecaoProf = id === COLECAO_PROF_ID;
+  const badge = ehColecao
+    ? "Coleção Completa"
+    : ehColecaoProf
+      ? "Combo Profissional"
+      : "Protocolo PER4MANCE";
+  const beneficios = ehColecao
+    ? [
+        `Acesso vitalício aos ${protocolos.length} protocolos`,
+        "Todos os e-books de bônus inclusos",
+        "Atualizações futuras sem custo",
+      ]
+    : ehColecaoProf
+      ? [
+          `Acesso vitalício aos ${BUNDLE_PROF.qtd} cursos para profissionais`,
+          "Conteúdo para avaliar e prescrever com método",
+          "Atualizações futuras sem custo",
+        ]
+      : [
+          "Acesso vitalício a este protocolo",
+          "Fichas das 3 fases (90 dias)",
+          "E-books do protocolo inclusos",
+        ];
 
   return (
     <main className="relative grid min-h-screen place-items-center overflow-hidden bg-[#0a0b0f] px-4 py-10">
@@ -62,7 +94,7 @@ export default async function ComprarPage({
             className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-black"
             style={{ background: info.cor }}
           >
-            {ehColecao ? "Coleção Completa" : "Protocolo PER4MANCE"}
+            {badge}
           </span>
 
           <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] text-white md:text-5xl">
@@ -78,18 +110,7 @@ export default async function ComprarPage({
           </div>
 
           <ul className="mt-6 space-y-2 text-sm text-neutral-300">
-            {(ehColecao
-              ? [
-                  `Acesso vitalício aos ${protocolos.length} protocolos`,
-                  "Todos os e-books de bônus inclusos",
-                  "Atualizações futuras sem custo",
-                ]
-              : [
-                  "Acesso vitalício a este protocolo",
-                  "Fichas das 3 fases (90 dias)",
-                  "E-books do protocolo inclusos",
-                ]
-            ).map((t) => (
+            {beneficios.map((t) => (
               <li key={t} className="flex items-start gap-2.5">
                 <span
                   className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-black"
