@@ -20,6 +20,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [mentor, setMentor] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -93,12 +94,28 @@ export function Navbar() {
         <div className="ml-auto flex items-center gap-4">
           <button
             aria-label="Buscar"
-            className="grid h-9 w-9 place-items-center rounded-full text-neutral-300 transition-colors hover:bg-white/10 hover:text-white"
+            className="hidden h-9 w-9 place-items-center rounded-full text-neutral-300 transition-colors hover:bg-white/10 hover:text-white sm:grid"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="11" cy="11" r="7" />
               <path d="m21 21-4.3-4.3" strokeLinecap="round" />
             </svg>
+          </button>
+          {/* hambúrguer — só no mobile */}
+          <button
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Menu"
+            className="grid h-9 w-9 place-items-center rounded-full text-neutral-200 transition-colors hover:bg-white/10 md:hidden"
+          >
+            {menuOpen ? (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                <path d="m6 6 12 12M18 6 6 18" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
+              </svg>
+            )}
           </button>
           {isAdmin(user?.email) && (
             <Link
@@ -134,6 +151,56 @@ export function Navbar() {
           )}
         </div>
       </nav>
+
+      {/* Menu mobile (abre no hambúrguer) */}
+      {menuOpen && (
+        <div className="border-t border-white/10 bg-[#0a0b0f]/98 px-4 py-3 backdrop-blur md:hidden">
+          <ul className="flex flex-col gap-1">
+            {LINKS.map((l, i) => (
+              <li key={i}>
+                <Link
+                  href={l.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block rounded-lg px-3 py-2.5 text-base font-medium text-neutral-200 transition-colors hover:bg-white/5 hover:text-white"
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+            {mentor && (
+              <li>
+                <Link href="/mentoria" onClick={() => setMenuOpen(false)}
+                  className="block rounded-lg px-3 py-2.5 text-base font-bold text-per-laranja">
+                  Mentoria
+                </Link>
+              </li>
+            )}
+            {isAdmin(user?.email) && (
+              <li>
+                <Link href="/admin" onClick={() => setMenuOpen(false)}
+                  className="block rounded-lg px-3 py-2.5 text-base font-bold text-per-laranja">
+                  Painel
+                </Link>
+              </li>
+            )}
+            {!user ? (
+              <li>
+                <Link href="/login" onClick={() => setMenuOpen(false)}
+                  className="mt-1 block rounded-lg bg-white px-3 py-3 text-center text-base font-bold text-black">
+                  Entrar
+                </Link>
+              </li>
+            ) : (
+              <li>
+                <button onClick={() => { setMenuOpen(false); sair(); }}
+                  className="block w-full rounded-lg px-3 py-2.5 text-left text-base font-medium text-neutral-300 transition-colors hover:bg-white/5">
+                  Sair
+                </button>
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
     </header>
   );
 }

@@ -18,7 +18,7 @@ export function ProgramaBanner({
 
   const inner = (
     <div
-      className="relative overflow-hidden rounded-2xl border border-white/10 p-8 transition-transform duration-300 hover:-translate-y-0.5 md:p-12"
+      className="relative overflow-hidden rounded-2xl border border-white/10 p-6 transition-transform duration-300 hover:-translate-y-0.5 sm:p-8 md:p-12"
       style={{ background: `linear-gradient(110deg, ${cor}2e 0%, #10131b 55%, #0a0b0f 100%)` }}
     >
       <div
@@ -40,10 +40,10 @@ export function ProgramaBanner({
           )}
         </div>
 
-        <h3 className="mt-2 font-display text-4xl font-extrabold uppercase italic leading-[0.9] text-white md:text-6xl">
+        <h3 className="mt-2 font-display text-3xl font-extrabold uppercase italic leading-[0.95] text-white sm:text-4xl md:text-6xl">
           {programa.titulo}
         </h3>
-        <p className="mt-3 text-lg font-medium text-neutral-200 md:text-xl">{programa.subtitulo}</p>
+        <p className="mt-3 text-base font-medium text-neutral-200 sm:text-lg md:text-xl">{programa.subtitulo}</p>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-neutral-400">{programa.descricao}</p>
 
         {programa.destaques?.length ? (

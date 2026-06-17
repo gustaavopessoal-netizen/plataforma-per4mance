@@ -119,13 +119,13 @@ export default async function Home() {
 
           {/* Banner da Coleção Completa */}
           <section id="colecao" className="px-4 py-8 md:px-12">
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-r from-per-azul/30 via-[#10131b] to-per-laranja/20 p-8 md:p-12">
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-r from-per-azul/30 via-[#10131b] to-per-laranja/20 p-6 sm:p-8 md:p-12">
               <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-per-azul/20 blur-3xl" />
               <div className="relative max-w-2xl">
                 <span className="text-xs font-bold uppercase tracking-widest text-per-laranja">
                   Acesso completo
                 </span>
-                <h3 className="mt-2 font-display text-4xl font-extrabold uppercase leading-none text-white md:text-5xl">
+                <h3 className="mt-2 font-display text-3xl font-extrabold uppercase leading-none text-white sm:text-4xl md:text-5xl">
                   {BUNDLE.titulo}
                 </h3>
                 <p className="mt-3 text-neutral-300">{BUNDLE.subtitulo}</p>

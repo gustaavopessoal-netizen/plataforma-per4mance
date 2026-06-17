@@ -75,13 +75,13 @@ export function Hero() {
             </p>
 
             {/* números do ecossistema */}
-            <div className="mt-7 flex items-center gap-6">
+            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 md:gap-6">
               {stats.map((s) => (
-                <div key={s.label} className="flex items-baseline gap-2">
-                  <span className="font-display text-3xl font-extrabold text-white md:text-4xl">
+                <div key={s.label} className="flex items-baseline gap-1.5 md:gap-2">
+                  <span className="font-display text-2xl font-extrabold text-white md:text-4xl">
                     {s.num}
                   </span>
-                  <span className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-neutral-400 md:text-xs">
                     {s.label}
                   </span>
                 </div>
