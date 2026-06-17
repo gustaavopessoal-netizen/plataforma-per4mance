@@ -28,10 +28,16 @@ export default async function CursoPage({
   const curso = getCurso(id);
   if (!curso) notFound();
 
-  const relacionados = cursos.filter((c) => c.id !== curso.id).slice(0, 8);
   const acessos = await getAcessos();
   const liberado = cursoLiberado(acessos, curso.id);
   const isProtocolo = (curso.categoria ?? "protocolo") === "protocolo";
+  // Relacionados SEMPRE da mesma categoria: num curso profissional mostramos
+  // outros cursos profissionais; num protocolo de atleta, outros protocolos
+  // (venda subliminar dos produtos do mesmo público).
+  const relacionados = cursos
+    .filter((c) => c.id !== curso.id)
+    .filter((c) => ((c.categoria ?? "protocolo") === "protocolo") === isProtocolo)
+    .slice(0, 8);
   // Conteúdo do curso (CMS). Aulas publicadas; vídeo só vai p/ quem comprou.
   const modulosCMS = await getModulosPublicos(curso.id, liberado);
 
@@ -291,9 +297,18 @@ export default async function CursoPage({
       </div>
 
       {/* Relacionados (CourseCard é client → precisa do provider) */}
-      <AcessosProvider value={acessos}>
-        <CourseRow title="Protocolos parecidos" cursos={relacionados} />
-      </AcessosProvider>
+      {relacionados.length > 0 && (
+        <AcessosProvider value={acessos}>
+          <CourseRow
+            title={
+              isProtocolo
+                ? "Continue sua recuperação — Protocolos para atletas"
+                : "Mais cursos para profissionais de Ed. Física"
+            }
+            cursos={relacionados}
+          />
+        </AcessosProvider>
+      )}
 
       <Footer />
     </main>
