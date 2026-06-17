@@ -49,7 +49,7 @@ export function Hero() {
                 height={28}
                 className="h-7 w-7 rounded-full object-cover"
               />
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-200">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-neutral-200 sm:text-xs sm:tracking-[0.2em]">
                 by Gustavo Vieira • Preparador Físico
               </span>
             </div>
