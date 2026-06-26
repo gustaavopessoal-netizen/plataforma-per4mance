@@ -9,10 +9,10 @@ import { isAdmin } from "@/lib/admin";
 
 const LINKS = [
   { label: "Início", href: "/" },
-  { label: "Profissionais", href: "/#profissionais" },
-  { label: "Atletas", href: "/#atletas" },
-  { label: "Protocolos", href: "/#catalogo" },
-  { label: "E-books", href: "/#ebooks" },
+  { label: "Atletas", href: "/?p=atleta" },
+  { label: "Profissionais", href: "/?p=prof" },
+  { label: "Protocolos", href: "/?p=atleta#catalogo" },
+  { label: "E-books", href: "/?p=atleta#ebooks" },
 ];
 
 export function Navbar() {
