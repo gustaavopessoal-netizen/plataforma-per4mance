@@ -182,8 +182,8 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "3×10 com carga"
         },
         {
-          "codigo": "E-069",
-          "nome": "Levantamento terra romeno",
+          "codigo": "E-070",
+          "nome": "Terra romeno unilateral",
           "prescricao": "4×6 pesado"
         },
         {
@@ -594,8 +594,8 @@ export const FICHAS: Record<string, Ficha[]> = {
       "titulo": "Carga Progressiva e Anti-Rotação",
       "exercicios": [
         {
-          "codigo": "E-069",
-          "nome": "Levantamento terra romeno",
+          "codigo": "E-070",
+          "nome": "Terra romeno unilateral",
           "prescricao": "4×8"
         },
         {
@@ -829,8 +829,8 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "4×6-8 (descida 3-5s, +carga)"
         },
         {
-          "codigo": "E-069",
-          "nome": "Levantamento terra romeno",
+          "codigo": "E-070",
+          "nome": "Terra romeno unilateral",
           "prescricao": "4×8"
         },
         {
@@ -905,8 +905,8 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "3×6-8 (preventivo 2x/sem)"
         },
         {
-          "codigo": "E-069",
-          "nome": "Levantamento terra romeno",
+          "codigo": "E-070",
+          "nome": "Terra romeno unilateral",
           "prescricao": "4×4-6 (carga alta)"
         },
         {
@@ -2022,8 +2022,8 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "4×5 (intensidade crescente)"
         },
         {
-          "codigo": "E-069",
-          "nome": "Levantamento terra romeno",
+          "codigo": "E-070",
+          "nome": "Terra romeno unilateral",
           "prescricao": "4×6 pesado"
         },
         {
