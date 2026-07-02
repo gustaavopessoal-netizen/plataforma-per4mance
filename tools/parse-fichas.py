@@ -59,7 +59,7 @@ ts = (
     "// GERADO automaticamente de recuperacao-esportiva/producao-videos/FICHAS-6-EXERCICIOS.md\n"
     "// Fonte de verdade do MÉTODO real do Gustavo (54 fichas: 9 protocolos × 6 fichas de 15 dias).\n"
     "// Para regenerar: python tools/parse-fichas.py\n\n"
-    "export type Exercicio = { codigo: string; nome: string; prescricao: string };\n"
+    "export type Exercicio = { codigo: string; nome: string; prescricao: string; videoUrl?: string };\n"
     "export type Ficha = {\n"
     "  num: number;\n"
     "  dias: string;\n"
