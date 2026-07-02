@@ -10,10 +10,12 @@ export function Fichas({
   modulos,
   liberado,
   cor,
+  cursoId,
 }: {
   modulos: Modulo[];
   liberado: boolean;
   cor: string;
+  cursoId: string;
 }) {
   const [aberta, setAberta] = useState<number | null>(liberado ? modulos[0]?.num ?? null : null);
   const [videoAberto, setVideoAberto] = useState<string | null>(null);
@@ -114,6 +116,15 @@ export function Fichas({
                     );
                   })}
                 </ul>
+                <a
+                  href={`/fichas/${cursoId}-f${m.num}.pdf`}
+                  download
+                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold transition-opacity hover:opacity-80"
+                  style={{ color: cor }}
+                >
+                  <span className="grid h-4 w-4 place-items-center rounded bg-white/10 text-[9px]">⬇</span>
+                  Baixar esta ficha em PDF
+                </a>
               </div>
             )}
           </li>

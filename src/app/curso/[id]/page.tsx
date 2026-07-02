@@ -204,7 +204,7 @@ export default async function CursoPage({
                     {curso.modulos.length} fichas · 90 dias
                   </span>
                 </div>
-                <Fichas modulos={modulosVisiveis} liberado={liberado} cor={curso.cor} />
+                <Fichas modulos={modulosVisiveis} liberado={liberado} cor={curso.cor} cursoId={curso.id} />
               </div>
             )}
 
