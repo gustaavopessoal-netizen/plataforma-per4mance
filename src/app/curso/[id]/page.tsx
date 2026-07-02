@@ -12,6 +12,7 @@ import { BotaoComprar } from "@/components/BotaoComprar";
 import { ConteudoCurso } from "@/components/ConteudoCurso";
 import { Fichas } from "@/components/Fichas";
 import { getModulosPublicos } from "@/data/cms";
+import { EXERCICIO_VIDEOS } from "@/data/exercicio-videos";
 import { getEbookIdsDoCurso } from "@/data/ebooks-curso";
 import { ebooks } from "@/data/ebooks";
 
@@ -51,7 +52,10 @@ export default async function CursoPage({
   // SEGURANÇA: quem NÃO comprou não recebe nem título nem exercícios das fichas
   // (senão dava pra copiar o método pelo código-fonte da página). Só a estrutura.
   const modulosVisiveis = liberado
-    ? curso.modulos
+    ? curso.modulos.map((m) => ({
+        ...m,
+        exercicios: m.exercicios.map((e) => ({ ...e, videoUrl: EXERCICIO_VIDEOS[e.codigo] })),
+      }))
     : curso.modulos.map((m) => ({
         num: m.num,
         titulo: "",

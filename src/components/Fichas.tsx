@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Modulo } from "@/data/courses";
+import { toEmbedUrl } from "@/lib/video";
 
 // Lista as 6 fichas (90 dias / 3 fases). Os exercícios só aparecem para quem
 // comprou (liberado) — protege o conteúdo pago; o resto vê só o título/fase.
@@ -15,6 +16,7 @@ export function Fichas({
   cor: string;
 }) {
   const [aberta, setAberta] = useState<number | null>(liberado ? modulos[0]?.num ?? null : null);
+  const [videoAberto, setVideoAberto] = useState<string | null>(null);
 
   return (
     <ul className="divide-y divide-white/10 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
@@ -69,17 +71,48 @@ export function Fichas({
             {aberto && (
               <div className="border-t border-white/5 bg-black/20 px-4 py-3">
                 <ul className="space-y-1.5">
-                  {m.exercicios.map((e, i) => (
-                    <li key={i} className="flex items-baseline justify-between gap-3 text-sm">
-                      <span className="text-neutral-200">
-                        <span className="mr-2 text-xs font-bold text-neutral-500">{i + 1}.</span>
-                        {e.nome}
-                      </span>
-                      <span className="shrink-0 text-xs font-semibold text-neutral-400">
-                        {e.prescricao}
-                      </span>
-                    </li>
-                  ))}
+                  {m.exercicios.map((e, i) => {
+                    const vkey = `${m.num}-${i}`;
+                    const vAberto = videoAberto === vkey;
+                    return (
+                      <li key={i} className="text-sm">
+                        <div className="flex items-baseline justify-between gap-3">
+                          <span className="text-neutral-200">
+                            <span className="mr-2 text-xs font-bold text-neutral-500">{i + 1}.</span>
+                            {e.nome}
+                          </span>
+                          <span className="shrink-0 text-xs font-semibold text-neutral-400">
+                            {e.prescricao}
+                          </span>
+                        </div>
+                        {e.videoUrl && (
+                          <button
+                            onClick={() => setVideoAberto(vAberto ? null : vkey)}
+                            className="mt-1 inline-flex items-center gap-1.5 text-xs font-bold transition-opacity hover:opacity-80"
+                            style={{ color: cor }}
+                          >
+                            <span className="grid h-4 w-4 place-items-center rounded-full bg-red-600 text-[8px] text-white">▶</span>
+                            {vAberto ? "Fechar vídeo" : "Ver vídeo"}
+                          </button>
+                        )}
+                        {e.videoUrl && vAberto && (
+                          <div className="mt-2 flex justify-center">
+                            <div
+                              className="w-full max-w-[240px] overflow-hidden rounded-lg bg-black ring-1 ring-white/10"
+                              style={{ aspectRatio: "9 / 16" }}
+                            >
+                              <iframe
+                                src={toEmbedUrl(e.videoUrl)}
+                                className="h-full w-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                                allowFullScreen
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             )}

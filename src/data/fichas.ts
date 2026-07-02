@@ -2,7 +2,7 @@
 // Fonte de verdade do MÉTODO real do Gustavo (54 fichas: 9 protocolos × 6 fichas de 15 dias).
 // Para regenerar: python tools/parse-fichas.py
 
-export type Exercicio = { codigo: string; nome: string; prescricao: string };
+export type Exercicio = { codigo: string; nome: string; prescricao: string; videoUrl?: string };
 export type Ficha = {
   num: number;
   dias: string;
@@ -32,22 +32,22 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-093",
           "nome": "Elevação de perna estendida",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-094",
           "nome": "Extensão terminal de joelho com banda",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-053",
           "nome": "Subida no step baixo",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-009",
           "nome": "Ponte de glúteo",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         }
       ]
     },
@@ -65,12 +65,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-010",
           "nome": "Concha",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-100",
           "nome": "Abdução de quadril em pé com banda",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-095",
@@ -80,7 +80,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-094",
           "nome": "Extensão terminal de joelho com banda",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-075",
@@ -101,8 +101,8 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "3-4×6-8 (descida 3-5s)"
         },
         {
-          "codigo": "E-056",
-          "nome": "Leg press unilateral",
+          "codigo": "E-063",
+          "nome": "Agachamento búlgaro",
           "prescricao": "3-4×6-8 (descida 3-5s)"
         },
         {
@@ -113,17 +113,17 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-059",
           "nome": "Afundo estático",
-          "prescricao": "3×10 moderado"
+          "prescricao": "3×15 moderado"
         },
         {
           "codigo": "E-097",
           "nome": "Ponte de glúteo unilateral",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-061",
           "nome": "Agachamento goblet",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         }
       ]
     },
@@ -272,7 +272,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-026",
           "nome": "Tibial posterior com banda",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-032",
@@ -290,22 +290,22 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-027",
           "nome": "Encolher toalha com os dedos",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-102",
           "nome": "Elevação do antepé (tibial anterior)",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-028",
           "nome": "Elevação de panturrilha bilateral",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-035",
           "nome": "Prancha de equilíbrio bilateral",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-036",
@@ -343,7 +343,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-029",
           "nome": "Elevação de panturrilha unilateral no degrau",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-034",
@@ -353,7 +353,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-033",
           "nome": "Elevação de panturrilha com carga",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         }
       ]
     },
@@ -482,12 +482,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-002",
           "nome": "Respiração diafragmática",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-001",
           "nome": "Ativação do transverso abdominal",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-004",
@@ -507,7 +507,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-106",
           "nome": "Abdominal curl-up (McGill)",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         }
       ]
     },
@@ -520,12 +520,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-005",
           "nome": "Inseto morto",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-006",
           "nome": "Cão de caça",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-007",
@@ -540,12 +540,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-106",
           "nome": "Abdominal curl-up (McGill)",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-009",
           "nome": "Ponte de glúteo",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         }
       ]
     },
@@ -558,32 +558,32 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-009",
           "nome": "Ponte de glúteo",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-097",
           "nome": "Ponte de glúteo unilateral",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-067",
           "nome": "Bom-dia (peso corporal)",
-          "prescricao": "3×10 moderado"
+          "prescricao": "3×15 moderado"
         },
         {
           "codigo": "E-061",
           "nome": "Agachamento goblet",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-107",
           "nome": "Extensão de tronco controlada (superman)",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-076",
           "nome": "Caminhada do monstro com banda",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         }
       ]
     },
@@ -604,8 +604,8 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "4×8"
         },
         {
-          "codigo": "E-048",
-          "nome": "Pressão de Pallof",
+          "codigo": "E-117",
+          "nome": "Pallof press overhead ajoelhado (anti-rotação)",
           "prescricao": "3×12 com carga"
         },
         {
@@ -657,8 +657,8 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "4×6 pesado"
         },
         {
-          "codigo": "E-048",
-          "nome": "Pressão de Pallof",
+          "codigo": "E-118",
+          "nome": "Lifting (diagonal baixo→alto no cabo)",
           "prescricao": "3×10 com carga"
         }
       ]
@@ -727,7 +727,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-009",
           "nome": "Ponte de glúteo",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-003",
@@ -765,17 +765,17 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-009",
           "nome": "Ponte de glúteo",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-097",
           "nome": "Ponte de glúteo unilateral",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-076",
           "nome": "Caminhada do monstro com banda",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         }
       ]
     },
@@ -793,7 +793,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-070",
           "nome": "Terra romeno unilateral",
-          "prescricao": "3×10 moderado"
+          "prescricao": "3×15 moderado"
         },
         {
           "codigo": "E-098",
@@ -803,12 +803,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-097",
           "nome": "Ponte de glúteo unilateral",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-073",
           "nome": "Elevação pélvica com carga",
-          "prescricao": "3×10 moderado"
+          "prescricao": "3×15 moderado"
         },
         {
           "codigo": "E-084",
@@ -867,9 +867,9 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "3×6 (carga alta)"
         },
         {
-          "codigo": "E-070",
-          "nome": "Terra romeno unilateral",
-          "prescricao": "4×6 pesado"
+          "codigo": "E-119",
+          "nome": "Elevação pélvica unilateral no banco",
+          "prescricao": "4×8 (cada perna)"
         },
         {
           "codigo": "E-074",
@@ -947,12 +947,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-001",
           "nome": "Ativação do transverso abdominal",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-002",
           "nome": "Respiração diafragmática",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-110",
@@ -962,12 +962,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-009",
           "nome": "Ponte de glúteo",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-005",
           "nome": "Inseto morto",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         }
       ]
     },
@@ -980,7 +980,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-012",
           "nome": "Adução deitado de lado",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-008",
@@ -995,7 +995,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-111",
           "nome": "Marcha de psoas com miniband",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-013",
@@ -1005,7 +1005,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-006",
           "nome": "Cão de caça",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         }
       ]
     },
@@ -1018,22 +1018,22 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-049",
           "nome": "Adução de quadril em pé com banda",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-048",
           "nome": "Pressão de Pallof",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-111",
           "nome": "Marcha de psoas com miniband",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-062",
           "nome": "Agachamento livre (peso corporal) com descida controlada",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-013",
@@ -1192,7 +1192,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-028",
           "nome": "Elevação de panturrilha bilateral",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-075",
@@ -1220,12 +1220,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-028",
           "nome": "Elevação de panturrilha bilateral",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-102",
           "nome": "Elevação do antepé (tibial anterior)",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-036",
@@ -1235,7 +1235,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-029",
           "nome": "Elevação de panturrilha unilateral no degrau",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         }
       ]
     },
@@ -1248,17 +1248,17 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-029",
           "nome": "Elevação de panturrilha unilateral no degrau",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-033",
           "nome": "Elevação de panturrilha com carga",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-105",
           "nome": "Panturrilha sentado com carga",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-030",
@@ -1422,12 +1422,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-010",
           "nome": "Concha",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-011",
           "nome": "Abdução de quadril deitado",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         }
       ]
     },
@@ -1450,22 +1450,22 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-111",
           "nome": "Marcha de psoas com miniband",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-010",
           "nome": "Concha",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-011",
           "nome": "Abdução de quadril deitado",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-100",
           "nome": "Abdução de quadril em pé com banda",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         }
       ]
     },
@@ -1488,22 +1488,22 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-062",
           "nome": "Agachamento livre (peso corporal) com descida controlada",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-076",
           "nome": "Caminhada do monstro com banda",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-097",
           "nome": "Ponte de glúteo unilateral",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-066",
           "nome": "Agachamento lateral",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         }
       ]
     },
@@ -1652,7 +1652,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-113",
           "nome": "Deslizamento escapular na parede",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-041",
@@ -1670,22 +1670,22 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-042",
           "nome": "Rotação externa com banda",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-043",
           "nome": "Flexão na parede com protração",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-044",
           "nome": "Retração escapular Y-T com banda",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-113",
           "nome": "Deslizamento escapular na parede",
-          "prescricao": "3×12"
+          "prescricao": "3×15-20"
         },
         {
           "codigo": "E-041",
@@ -1708,32 +1708,32 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-042",
           "nome": "Rotação externa com banda",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-046",
           "nome": "Elevação lateral até 90°",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-045",
           "nome": "Puxada na face",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-047",
           "nome": "Remada unilateral com halter",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-044",
           "nome": "Retração escapular Y-T com banda",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-116",
           "nome": "Flexão de braço com protração (push-up plus)",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         }
       ]
     },
@@ -1872,12 +1872,12 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-093",
           "nome": "Elevação de perna estendida",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-094",
           "nome": "Extensão terminal de joelho com banda",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         },
         {
           "codigo": "E-052",
@@ -1887,7 +1887,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-009",
           "nome": "Ponte de glúteo",
-          "prescricao": "3×10 controladas"
+          "prescricao": "3×15-20 controladas"
         }
       ]
     },
@@ -1936,19 +1936,19 @@ export const FICHAS: Record<string, Ficha[]> = {
       "titulo": "Força Básica em Cadeia Fechada",
       "exercicios": [
         {
-          "codigo": "E-055",
-          "nome": "Leg press bilateral",
-          "prescricao": "3×10 moderado"
+          "codigo": "E-061",
+          "nome": "Agachamento goblet",
+          "prescricao": "3×10-12 moderado"
         },
         {
           "codigo": "E-062",
           "nome": "Agachamento livre (peso corporal) com descida controlada",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         },
         {
           "codigo": "E-059",
           "nome": "Afundo estático",
-          "prescricao": "3×10 moderado"
+          "prescricao": "3×15 moderado"
         },
         {
           "codigo": "E-095",
@@ -1963,7 +1963,7 @@ export const FICHAS: Record<string, Ficha[]> = {
         {
           "codigo": "E-097",
           "nome": "Ponte de glúteo unilateral",
-          "prescricao": "3×12-15 (ou +carga)"
+          "prescricao": "3×15-20 (ou +carga)"
         }
       ]
     },
@@ -1979,8 +1979,8 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "4×8"
         },
         {
-          "codigo": "E-056",
-          "nome": "Leg press unilateral",
+          "codigo": "E-063",
+          "nome": "Agachamento búlgaro",
           "prescricao": "4×6-8 (descida 3-5s, +carga)"
         },
         {
@@ -2060,8 +2060,8 @@ export const FICHAS: Record<string, Ficha[]> = {
           "prescricao": "4×4 (intensidade máxima)"
         },
         {
-          "codigo": "E-078",
-          "nome": "Saltos bilaterais com aterrissagem controlada",
+          "codigo": "E-120",
+          "nome": "Salto em profundidade (depth jump)",
           "prescricao": "4×4 (intensidade máxima)"
         },
         {
