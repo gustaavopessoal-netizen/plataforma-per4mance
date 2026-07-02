@@ -75,7 +75,13 @@ export default async function AlunosPage() {
                         <span className="text-xs text-neutral-500">nenhuma</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="whitespace-nowrap px-4 py-3 text-right">
+                      <Link
+                        href={`/admin/liberar-fichas/${a.id}`}
+                        className="mr-4 text-sm font-semibold text-neutral-300 hover:underline"
+                      >
+                        🔓 Fichas
+                      </Link>
                       <Link
                         href={`/admin/alunos/${a.id}`}
                         className="text-sm font-semibold text-per-azul hover:underline"
