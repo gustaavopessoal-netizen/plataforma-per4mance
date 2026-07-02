@@ -13,6 +13,7 @@ import { ConteudoCurso } from "@/components/ConteudoCurso";
 import { Fichas } from "@/components/Fichas";
 import { getModulosPublicos } from "@/data/cms";
 import { EXERCICIO_VIDEOS } from "@/data/exercicio-videos";
+import { getDrip } from "@/data/drip";
 import { getEbookIdsDoCurso } from "@/data/ebooks-curso";
 import { ebooks } from "@/data/ebooks";
 
@@ -51,10 +52,20 @@ export default async function CursoPage({
 
   // SEGURANÇA: quem NÃO comprou não recebe nem título nem exercícios das fichas
   // (senão dava pra copiar o método pelo código-fonte da página). Só a estrutura.
+  // Liberação progressiva: quais fichas já estão abertas para este aluno.
+  const drip =
+    liberado && curso.modulos.length > 0
+      ? await getDrip(curso.id)
+      : { desbloqueadas: [] as number[], dataCompra: null as string | null, admin: false };
+  const abertas = new Set(drip.desbloqueadas);
+
   const modulosVisiveis = liberado
     ? curso.modulos.map((m) => ({
         ...m,
-        exercicios: m.exercicios.map((e) => ({ ...e, videoUrl: EXERCICIO_VIDEOS[e.codigo] })),
+        // Só manda os exercícios (e vídeos) das fichas já liberadas pelo drip.
+        exercicios: abertas.has(m.num)
+          ? m.exercicios.map((e) => ({ ...e, videoUrl: EXERCICIO_VIDEOS[e.codigo] }))
+          : [],
       }))
     : curso.modulos.map((m) => ({
         num: m.num,
@@ -204,7 +215,14 @@ export default async function CursoPage({
                     {curso.modulos.length} fichas · 90 dias
                   </span>
                 </div>
-                <Fichas modulos={modulosVisiveis} liberado={liberado} cor={curso.cor} cursoId={curso.id} />
+                <Fichas
+                  modulos={modulosVisiveis}
+                  liberado={liberado}
+                  cor={curso.cor}
+                  cursoId={curso.id}
+                  desbloqueadas={drip.desbloqueadas}
+                  dataCompra={drip.dataCompra}
+                />
               </div>
             )}
 

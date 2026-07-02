@@ -4,37 +4,58 @@ import { useState } from "react";
 import type { Modulo } from "@/data/courses";
 import { toEmbedUrl } from "@/lib/video";
 
-// Lista as 6 fichas (90 dias / 3 fases). Os exercícios só aparecem para quem
-// comprou (liberado) — protege o conteúdo pago; o resto vê só o título/fase.
+const DIA_MS = 86_400_000;
+const DIAS_POR_FICHA = 15;
+
+// Lista as 6 fichas (90 dias / 3 fases). A liberação é PROGRESSIVA: Ficha 1 na
+// compra e +1 a cada 15 dias (`desbloqueadas`). Ficha travada mostra a contagem.
+// Os exercícios só chegam aqui para fichas liberadas (a página já filtra).
 export function Fichas({
   modulos,
   liberado,
   cor,
   cursoId,
+  desbloqueadas,
+  dataCompra,
 }: {
   modulos: Modulo[];
   liberado: boolean;
   cor: string;
   cursoId: string;
+  desbloqueadas: number[];
+  dataCompra: string | null;
 }) {
-  const [aberta, setAberta] = useState<number | null>(liberado ? modulos[0]?.num ?? null : null);
+  const primeira = [...desbloqueadas].sort((a, b) => a - b)[0] ?? null;
+  const [aberta, setAberta] = useState<number | null>(primeira);
   const [videoAberto, setVideoAberto] = useState<string | null>(null);
+
+  const estaLiberada = (num: number) => desbloqueadas.includes(num);
+
+  // Ficha travada pelo drip: dias restantes + data prevista de liberação.
+  function liberaEm(num: number) {
+    if (!dataCompra) return null;
+    const quando = new Date(dataCompra).getTime() + (num - 1) * DIAS_POR_FICHA * DIA_MS;
+    const dias = Math.max(0, Math.ceil((quando - Date.now()) / DIA_MS));
+    return { dias, data: new Date(quando).toLocaleDateString("pt-BR") };
+  }
 
   return (
     <ul className="divide-y divide-white/10 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
       {modulos.map((m) => {
-        const aberto = liberado && aberta === m.num;
+        const libere = estaLiberada(m.num);
+        const aberto = libere && aberta === m.num;
+        const prazo = liberado && !libere ? liberaEm(m.num) : null;
         return (
           <li key={m.num}>
             <button
-              onClick={() => liberado && setAberta(aberto ? null : m.num)}
+              onClick={() => libere && setAberta(aberto ? null : m.num)}
               className={`flex w-full items-center gap-4 p-4 text-left transition-colors ${
-                liberado ? "hover:bg-white/5" : "cursor-default"
+                libere ? "hover:bg-white/5" : "cursor-default"
               }`}
             >
               <span
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-lg font-display text-lg font-bold text-black"
-                style={{ background: cor }}
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-lg font-display text-lg font-bold"
+                style={{ background: libere ? cor : "#2a2e38", color: libere ? "#000" : "#8b909b" }}
               >
                 {m.num}
               </span>
@@ -45,12 +66,14 @@ export function Fichas({
                 </p>
                 <p className="mt-0.5 text-xs font-medium text-neutral-400">
                   <span style={{ color: cor }}>{m.fase}</span> · Dias {m.dias}
-                  {liberado
+                  {libere
                     ? ` · ${m.exercicios.length} exercícios`
-                    : " · 🔒 liberado após a compra"}
+                    : prazo
+                      ? ` · 🔒 Libera em ${prazo.dias} ${prazo.dias === 1 ? "dia" : "dias"} (${prazo.data})`
+                      : " · 🔒 liberado após a compra"}
                 </p>
               </div>
-              {liberado ? (
+              {libere ? (
                 <svg
                   width="18"
                   height="18"
